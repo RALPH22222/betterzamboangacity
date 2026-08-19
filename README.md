@@ -1,46 +1,47 @@
-# Astro Starter Kit: Basics
+# Better Zamboanga City
 
-```sh
-npm create astro@latest -- --template basics
-```
+Better Zamboanga City is an independent, volunteer-maintained civic-information portal under the [BetterGov.ph](https://bettergov.ph/) initiative. It aims to make verified public information, local records, and civic data across Zamboanga City accessible, searchable, and easy to understand.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> **Better Zamboanga City is not an official government website.** It is not owned, operated, endorsed, or approved by the City Government of Zamboanga or any public agency. Always verify time-sensitive transactions and legal matters directly with the responsible city department.
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🚦 Project Status
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+**Work in Progress / Active Development.** 
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+The application architecture and static content pipeline are actively being constructed. Public records covering city identity, barangay rosters, public utilities, emergency hotlines, and local ordinances are staged and validated against our verification guidelines prior to live indexing.
 
-## 🧞 Commands
+### Roadmap & Next Steps
 
-All commands are run from the root of the project, from a terminal:
+1. Configure the core Astro + MDX content collections schema for city documents and datasets.
+2. Index verified Zamboanga City public directories and emergency hotlines.
+3. Integrate interactive client islands for filtering services and barangay records.
+4. Finalize automated accessibility (a11y), link integrity, and responsive layout audits.
+5. Deploy preview builds and prepare for official directory verification.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
 
-## 👀 Want to learn more?
+## 🛠️ Technical Foundation
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The project is built on **Astro** with **MDX** for structured content delivery and React for interactive components.
+
+* **Framework:** [Astro](https://astro.build/) (Static Site Generation / Islands Architecture)
+* **Content:** [MDX](https://mdxjs.com/) via Astro Content Collections
+* **Styling:** Tailwind CSS
+* **Deployment:** Vercel
+
+### Local Setup
+
+Make sure you have [Node.js](https://nodejs.org/) (v18.17.0+ or v20+) and Git installed.
+
+```bash
+# Clone repository
+git clone [https://github.com/RALPH22222/better-zamboanga-city.git](https://github.com/RALPH22222/better-zamboanga-city.git)
+cd better-zamboanga-city
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
