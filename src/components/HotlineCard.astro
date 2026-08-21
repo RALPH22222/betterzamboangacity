@@ -1,0 +1,95 @@
+---
+interface Props {
+  agency: string;
+  phone: string;
+  icon?: 'phone' | 'shield' | 'fire' | 'police' | 'cross' | string;
+  color?: 'red' | 'emerald' | 'amber' | 'blue' | 'rose' | string;
+}
+
+const {
+  agency,
+  phone,
+  icon = "phone",
+  color = "red"
+} = Astro.props;
+
+const colorStyles = {
+  red: {
+    badge: 'bg-red-50 text-red-600 border-red-100',
+    number: 'text-red-600 hover:text-red-700',
+  },
+  emerald: {
+    badge: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    number: 'text-emerald-700 hover:text-emerald-800',
+  },
+  amber: {
+    badge: 'bg-amber-50 text-amber-600 border-amber-100',
+    number: 'text-amber-700 hover:text-amber-800',
+  },
+  blue: {
+    badge: 'bg-blue-50 text-blue-600 border-blue-100',
+    number: 'text-blue-700 hover:text-blue-800',
+  },
+  rose: {
+    badge: 'bg-rose-50 text-rose-600 border-rose-100',
+    number: 'text-rose-700 hover:text-rose-800',
+  },
+};
+
+const style = colorStyles[color as keyof typeof colorStyles] || colorStyles.red;
+const cleanPhone = phone.replace(/[^0-9]/g, '');
+---
+
+<div class="bg-white border border-slate-100 shadow-xs hover:shadow-md transition-all rounded-3xl p-5 flex flex-col items-center text-center justify-between group h-full hover:border-slate-200">
+  <div class="flex flex-col items-center">
+    <!-- Icon Badge -->
+    <div class={`w-11 h-11 rounded-2xl flex items-center justify-center mb-3 border ${style.badge} group-hover:scale-110 transition-transform duration-200`}>
+      {icon === 'phone' && (
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+      )}
+
+      {icon === 'shield' && (
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      )}
+
+      {icon === 'fire' && (
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+        </svg>
+      )}
+
+      {icon === 'police' && (
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      )}
+
+      {icon === 'cross' && (
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      )}
+    </div>
+
+    <!-- Agency Name -->
+    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+      {agency}
+    </div>
+  </div>
+
+  <!-- Phone Number Link -->
+  <a
+    href={`tel:${cleanPhone || phone}`}
+    class={`text-lg sm:text-xl font-extrabold font-mono tracking-tight flex items-center justify-center gap-1.5 ${style.number} transition-colors focus:outline-none focus:underline`}
+    aria-label={`Call ${agency} at ${phone}`}
+  >
+    <svg class="w-4 h-4 opacity-75 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+    </svg>
+    <span>{phone}</span>
+  </a>
+</div>

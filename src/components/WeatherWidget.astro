@@ -1,0 +1,89 @@
+---
+interface Props {
+  temp?: string;
+  condition?: string;
+  humidity?: string;
+  wind?: string;
+  feelsLike?: string;
+  city?: string;
+}
+
+const {
+  temp = "29°C",
+  condition = "Partly Cloudy / Tropical Rain",
+  humidity = "82%",
+  wind = "12 km/h",
+  feelsLike = "33°C",
+  city = "Zamboanga City, PH",
+} = Astro.props;
+---
+
+<div class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-blue-600/10 flex flex-col justify-between h-full relative overflow-hidden group">
+  <!-- Subtle SVG Background Wave Decor -->
+  <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-500">
+    <svg class="w-64 h-64 fill-white" viewBox="0 0 24 24">
+      <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+  </div>
+
+  <div>
+    <!-- City Header Badge -->
+    <div class="flex items-center justify-between mb-6">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold tracking-wide border border-white/20">
+        <svg class="w-3.5 h-3.5 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        </svg>
+        {city}
+      </span>
+      <span class="text-[11px] text-blue-100 font-mono">LIVE WEATHER</span>
+    </div>
+
+    <!-- Main Temperature & Condition Display -->
+    <div class="flex items-center justify-between gap-4 mb-8">
+      <div>
+        <div class="text-5xl sm:text-6xl font-black tracking-tight drop-shadow-sm font-sans">
+          {temp}
+        </div>
+        <div class="text-sm font-medium text-blue-100 mt-1">
+          {condition}
+        </div>
+      </div>
+
+      <!-- Animated Cloud / Rain Icon -->
+      <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-amber-300 shrink-0">
+        <svg class="w-10 h-10 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Secondary Metrics Row -->
+    <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center mb-6">
+      <div>
+        <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Humidity</div>
+        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{humidity}</div>
+      </div>
+      <div class="border-x border-white/15">
+        <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Wind</div>
+        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{wind}</div>
+      </div>
+      <div>
+        <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Feels Like</div>
+        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{feelsLike}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Forecast Footer Link -->
+  <div class="pt-4 border-t border-white/15 text-center">
+    <a
+      href="/weather"
+      class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-100 hover:text-white transition-colors group/link"
+    >
+      <span>Click to view detailed forecast</span>
+      <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </a>
+  </div>
+</div>

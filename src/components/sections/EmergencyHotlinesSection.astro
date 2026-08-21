@@ -1,0 +1,89 @@
+---
+import HotlineCard from '../HotlineCard.astro';
+
+const hotlines = [
+  {
+    agency: 'NATIONAL EMERGENCY*',
+    phone: '911',
+    icon: 'phone',
+    color: 'red',
+  },
+  {
+    agency: 'RESCUE / CDRRMO',
+    phone: '(062) 991-2345',
+    icon: 'shield',
+    color: 'emerald',
+  },
+  {
+    agency: 'FIRE',
+    phone: '160',
+    icon: 'fire',
+    color: 'amber',
+  },
+  {
+    agency: 'POLICE',
+    phone: '166',
+    icon: 'police',
+    color: 'blue',
+  },
+  {
+    agency: 'AMBULANCE',
+    phone: '(062) 991-2400',
+    icon: 'cross',
+    color: 'rose',
+  },
+];
+---
+
+<section class="relative py-16 md:py-24 bg-gradient-to-b from-slate-50 via-red-50/20 to-slate-50 border-y border-slate-200/80 font-sans overflow-hidden">
+  
+  <!-- Subtle Background Grid & Red Accent Glow -->
+  <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-red-500/5 blur-3xl pointer-events-none rounded-full"></div>
+
+  <div class="container relative z-10 mx-auto px-4">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100/80 text-red-700 text-xs font-bold uppercase tracking-wider mb-3 border border-red-200">
+        <svg class="w-3.5 h-3.5 text-red-600 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>24/7 City Emergency Contacts</span>
+      </div>
+
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+        Emergency Hotlines
+      </h2>
+      <p class="text-slate-600 text-sm sm:text-base font-normal leading-relaxed">
+        Save these before you need them. Tap any number to call directly.
+      </p>
+    </div>
+
+    <!-- 5 Card Responsive Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-12">
+      {hotlines.map((item) => (
+        <HotlineCard
+          agency={item.agency}
+          phone={item.phone}
+          icon={item.icon}
+          color={item.color}
+        />
+      ))}
+    </div>
+
+    <!-- Bottom Action Button -->
+    <div class="text-center">
+      <a
+        href="/disaster"
+        class="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-2xl shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+      >
+        <span>Disaster Preparedness Hub</span>
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,159 @@
+---
+import ServiceSearch from '../ServiceSearch';
+
+// Curated Soft Pastel Vinta Palette:
+// 1. Pastel Lavender Purple: #c084fc
+// 2. Pearl Silk White: #f8fafc
+// 3. Pastel Mint Green: #4ade80
+// 4. Muted Slate Blue: #475569
+// 5. Pastel Coral Rose: #fca5a5
+// 6. Soft Sand Cream: #fef3c7
+---
+
+<section class="relative min-h-[600px] text-white py-16 md:py-24 lg:py-28 overflow-hidden font-sans bg-slate-950">
+  
+  <!-- ========================================================================= -->
+  <!-- REALISTIC VINTA SAIL BACKGROUND WITH PASTEL COLORS & WIND MOTION -->
+  <!-- ========================================================================= -->
+  <div class="absolute inset-0 z-0 flex flex-col pointer-events-none select-none overflow-hidden">
+    
+    <!-- 1. Top Band - Pastel Ocean Sky Blue (14% height) -->
+    <div class="h-[14%] w-full bg-gradient-to-r from-[#38bdf8] via-[#60a5fa] to-[#818cf8] relative">
+      <div class="absolute inset-0 bg-[radial-gradient(#ffffff20_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <!-- Sunlight Glare Beam -->
+      <div class="absolute top-0 right-1/4 w-96 h-full bg-gradient-to-b from-white/30 to-transparent blur-md"></div>
+    </div>
+
+    <!-- 2. Chevron / Sawtooth Band - Pastel Yellow & Peach Teeth (9% height) -->
+    <div class="h-[9%] w-full bg-[#fde047] relative overflow-hidden flex">
+      {Array.from({ length: 24 }).map((_) => (
+        <div class="grow h-full flex">
+          <div class="w-1/2 h-full bg-[#fb923c] [clip-path:polygon(0_0,100%_100%,0_100%)]"></div>
+          <div class="w-1/2 h-full bg-[#fde047] [clip-path:polygon(0_100%,100%_0,100%_100%)]"></div>
+        </div>
+      ))}
+    </div>
+
+    <!-- 3. Vertical Pastel Color Stripes (67% height) with Soft Sail Fabric Texture -->
+    <div class="h-[67%] w-full flex relative">
+      
+      <!-- Wind Ripple / Wave Texture Overlay for Realistic Sail Motion -->
+      <div class="absolute inset-0 z-10 opacity-35 bg-[linear-gradient(115deg,transparent_40%,rgba(255,255,255,0.4)_50%,transparent_60%)] bg-[size:200%_100%] animate-pulse"></div>
+
+      <!-- Stripe 1: Pastel Lavender Purple -->
+      <div class="w-[16.66%] h-full bg-[#c084fc] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/30"></div>
+      </div>
+
+      <!-- Stripe 2: Pearl Silk White -->
+      <div class="w-[16.66%] h-full bg-[#f8fafc] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20"></div>
+      </div>
+
+      <!-- Stripe 3: Pastel Mint Green -->
+      <div class="w-[16.66%] h-full bg-[#4ade80] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/30"></div>
+      </div>
+
+      <!-- Stripe 4: Muted Slate Blue -->
+      <div class="w-[16.66%] h-full bg-[#475569] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/30"></div>
+      </div>
+
+      <!-- Stripe 5: Pastel Coral Rose -->
+      <div class="w-[16.66%] h-full bg-[#fca5a5] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/30"></div>
+      </div>
+
+      <!-- Stripe 6: Soft Sand Cream -->
+      <div class="w-[16.66%] h-full bg-[#fef3c7] relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/20"></div>
+      </div>
+    </div>
+
+    <!-- 4. Bottom Sulu Sea Waves Layer (10% height) - Realistic Sailing Feel -->
+    <div class="h-[10%] w-full bg-gradient-to-t from-[#0284c7] via-[#0369a1] to-transparent relative">
+      <!-- Animated Sea Spray Wave Curves -->
+      <svg class="absolute -top-4 left-0 w-full h-8 text-[#0284c7]/80 opacity-90 fill-current animate-pulse" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0 C150,90 350,-40 500,40 C650,120 900,-20 1200,40 L1200,120 L0,120 Z"></path>
+      </svg>
+      <svg class="absolute -top-2 left-0 w-full h-6 text-[#38bdf8]/60 opacity-80 fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,30 C200,-10 400,60 600,10 C800,-30 1000,50 1200,20 L1200,120 L0,120 Z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Subtle Ambient Dark Overlay for High-Contrast Text Legibility -->
+  <div class="absolute inset-0 z-0 bg-slate-950/30 pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- HERO CONTENT CONTAINER -->
+  <!-- ========================================================================= -->
+  <div class="container relative z-10 mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Left Column Text Content -->
+      <div class="lg:col-span-7 flex flex-col items-start text-left">
+        
+        <!-- Status Pill Badge -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-xs font-bold text-white mb-6 shadow-xl">
+          <span class="flex h-3.5 w-3.5 relative items-center justify-center">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-300"></span>
+          </span>
+          <span class="tracking-wide drop-shadow">Bienvenidos! · Portal Active</span>
+          <span class="hidden sm:inline text-blue-200">|</span>
+          <span class="hidden sm:inline text-amber-200 font-semibold drop-shadow">Asia's Latin City</span>
+        </div>
+
+        <!-- Main Headline (Direct white text with strong drop shadow) -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)]">
+          Bienvenidos! <br class="hidden sm:inline" />
+          <span class="text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)]">Better<span class="text-amber-200">Zamboanga</span>City</span>
+        </h1>
+
+        <!-- Soft Pastel Vinta Sail Ribbon Accent Bar -->
+        <div class="flex items-center gap-1 mb-6">
+          <div class="h-2.5 w-10 rounded-l-full bg-[#c084fc] shadow-sm"></div>
+          <div class="h-2.5 w-10 bg-[#f8fafc] shadow-sm"></div>
+          <div class="h-2.5 w-10 bg-[#4ade80] shadow-sm"></div>
+          <div class="h-2.5 w-10 bg-[#475569] shadow-sm"></div>
+          <div class="h-2.5 w-10 bg-[#fca5a5] shadow-sm"></div>
+          <div class="h-2.5 w-10 rounded-r-full bg-[#fef3c7] shadow-sm"></div>
+          <span class="ml-2.5 text-[11px] font-extrabold text-amber-200 uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">Orgullo De Mindanao</span>
+        </div>
+
+        <!-- Subtitle Paragraph -->
+        <p class="text-base sm:text-lg text-white font-medium leading-relaxed max-w-2xl mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+          A modernized, volunteer-driven civic portal providing fast, transparent access to government services, public data, and community resources for all Zamboangueños.
+        </p>
+
+        <!-- Primary Action Buttons -->
+        <div class="flex flex-wrap items-center gap-4">
+          <a
+            href="/services"
+            class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-amber-300 hover:bg-amber-200 text-slate-950 font-bold transition-all shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+          >
+            <span>Browse Services</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+
+          <a
+            href="/about"
+            class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-950/75 hover:bg-slate-900 text-white text-sm font-bold border border-white/20 transition-all backdrop-blur-md shadow-xl"
+          >
+            <span>Explore City Profile</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column Search Component -->
+      <div class="lg:col-span-5 flex justify-center lg:justify-end relative z-10">
+        <ServiceSearch client:load />
+      </div>
+
+    </div>
+  </div>
+</section>
