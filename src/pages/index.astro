@@ -1,9 +1,5 @@
 ---
-import '../styles/global.css';
 import Layout from '../layouts/Layout.astro';
-import TopBar from '../components/TopBar.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 
 import HeroSection from '../components/sections/HeroSection.astro';
 import CityServicesSection from '../components/sections/CityServicesSection.astro';
@@ -13,21 +9,9 @@ import WeatherMapSection from '../components/sections/WeatherMapSection.astro';
 ---
 
 <Layout title="Better Zamboanga City | Civic Transparency & Services Portal">
-  <!-- Top Utility Banner -->
-  <TopBar />
-
-  <!-- Main Navigation Header -->
-  <Header />
-
-  <!-- Main Page Content Sections -->
-  <main id="main-content" class="grow flex flex-col focus:outline-none" tabindex="-1">
-    <HeroSection />
-    <CityServicesSection />
-    <EmergencyHotlinesSection />
-    <CityStatisticsSection />
-    <WeatherMapSection />
-  </main>
-
-  <!-- Global Footer -->
-  <Footer />
+  <HeroSection />
+  <CityServicesSection />
+  <EmergencyHotlinesSection />
+  <CityStatisticsSection />
+  <WeatherMapSection />
 </Layout>

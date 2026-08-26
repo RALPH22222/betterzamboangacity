@@ -1,11 +1,19 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import TopBar from '../components/TopBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   canonicalURL?: string;
+  showTopBar?: boolean;
+  showHeader?: boolean;
+  showFooter?: boolean;
+  mainClass?: string;
 }
 
 const {
@@ -13,6 +21,10 @@ const {
   description = 'A modernized, volunteer-driven portal to access government services, public data, and resources for the people of Zamboanga City.',
   image = '/images/og-image.png',
   canonicalURL = Astro.url.href,
+  showTopBar = true,
+  showHeader = true,
+  showFooter = true,
+  mainClass = 'grow flex flex-col focus:outline-none',
 } = Astro.props;
 ---
 
@@ -38,12 +50,8 @@ const {
     <meta property="og:site_name" content="Better Zamboanga City" />
     <meta property="og:locale" content="en_PH" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+    <!-- Client Router for smooth client-side page transitions -->
+    <ClientRouter />
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-blue-600 selection:text-white">
     <!-- Skip to main content for Accessibility -->
@@ -54,6 +62,13 @@ const {
       Skip to main content
     </a>
 
-    <slot />
+    {showTopBar && <TopBar />}
+    {showHeader && <Header />}
+
+    <main id="main-content" class={mainClass} tabindex="-1">
+      <slot />
+    </main>
+
+    {showFooter && <Footer />}
   </body>
 </html>

@@ -1,6 +1,7 @@
 ---
 import HotlineCard from '../HotlineCard.astro';
 
+// Official Zamboanga City Emergency Hotlines (Deduplicated)
 const hotlines = [
   {
     agency: 'NATIONAL EMERGENCY*',
@@ -9,54 +10,47 @@ const hotlines = [
     color: 'red',
   },
   {
-    agency: 'RESCUE / CDRRMO',
-    phone: '(062) 991-2345',
+    agency: 'ZCDRRMO / RESCUE',
+    phone: '(062) 995-9601',
     icon: 'shield',
     color: 'emerald',
   },
   {
-    agency: 'FIRE',
-    phone: '160',
-    icon: 'fire',
-    color: 'amber',
+    agency: 'EMS / AMBULANCE',
+    phone: '(062) 926-1849',
+    icon: 'cross',
+    color: 'rose',
   },
   {
-    agency: 'POLICE',
-    phone: '166',
+    agency: 'POLICE / ZCPO HQ',
+    phone: '0977-855-8138',
     icon: 'police',
     color: 'blue',
   },
   {
-    agency: 'AMBULANCE',
-    phone: '(062) 991-2400',
-    icon: 'cross',
-    color: 'rose',
+    agency: 'TASK FORCE ZAMBOANGA',
+    phone: '0917-710-2326',
+    icon: 'shield',
+    color: 'amber',
   },
 ];
 ---
 
-<section class="relative py-16 md:py-24 bg-gradient-to-b from-slate-50 via-red-50/20 to-slate-50 border-y border-slate-200/80 font-sans overflow-hidden">
-  
-  <!-- Subtle Background Grid & Red Accent Glow -->
-  <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none"></div>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-red-500/5 blur-3xl pointer-events-none rounded-full"></div>
-
-  <div class="container relative z-10 mx-auto px-4">
+<section class="py-16 md:py-24 bg-white border-t border-slate-100 font-sans">
+  <div class="container mx-auto px-4">
     
     <!-- Section Header -->
     <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100/80 text-red-700 text-xs font-bold uppercase tracking-wider mb-3 border border-red-200">
-        <svg class="w-3.5 h-3.5 text-red-600 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <span>24/7 City Emergency Contacts</span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wider mb-3 border border-red-200/80">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+        <span>Official Zamboanga City Emergency Hotlines</span>
       </div>
 
       <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
         Emergency Hotlines
       </h2>
       <p class="text-slate-600 text-sm sm:text-base font-normal leading-relaxed">
-        Save these before you need them. Tap any number to call directly.
+        Save these verified Zamboanga numbers before you need them. Tap any card to call directly.
       </p>
     </div>
 
@@ -72,18 +66,84 @@ const hotlines = [
       ))}
     </div>
 
-    <!-- Bottom Action Button -->
+    <!-- Action Button -->
     <div class="text-center">
       <a
         href="/disaster"
-        class="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-2xl shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+        class="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-2xl shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 group"
       >
-        <span>Disaster Preparedness Hub</span>
-        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        <span>View Complete Station & Hotline Directory</span>
+        <svg class="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
       </a>
     </div>
 
   </div>
 </section>
+
+<script>
+  function setupPhoneCopying() {
+    document.body.addEventListener('click', async (e) => {
+      const target = (e.target as HTMLElement).closest('[data-copy-phone]') as HTMLElement | null;
+      if (!target) return;
+      
+      const phone = target.getAttribute('data-copy-phone');
+      if (!phone) return;
+      
+      try {
+        await navigator.clipboard.writeText(phone);
+        
+        const copyIcon = target.querySelector('.copy-icon');
+        const checkIcon = target.querySelector('.check-icon');
+        
+        if (copyIcon && checkIcon) {
+          copyIcon.classList.add('hidden');
+          checkIcon.classList.remove('hidden');
+          setTimeout(() => {
+            copyIcon.classList.remove('hidden');
+            checkIcon.classList.add('hidden');
+          }, 2000);
+        }
+
+        showToast(`Copied ${phone} to clipboard`);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    });
+  }
+
+  function showToast(message: string) {
+    let toast = document.getElementById('phone-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'phone-toast';
+      toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs sm:text-sm font-semibold px-4 py-3 rounded-2xl shadow-xl border border-slate-700/60 transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2.5 pointer-events-none';
+      toast.innerHTML = `
+        <svg class="w-4.5 h-4.5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+        </svg>
+        <span id="phone-toast-text"></span>
+      `;
+      document.body.appendChild(toast);
+    }
+
+    const textEl = document.getElementById('phone-toast-text');
+    if (textEl) textEl.textContent = message;
+
+    toast.classList.remove('translate-y-10', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast?.classList.remove('translate-y-0', 'opacity-100');
+      toast?.classList.add('translate-y-10', 'opacity-0');
+    }, 2500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPhoneCopying);
+  } else {
+    setupPhoneCopying();
+  }
+</script>
+
