@@ -28,7 +28,7 @@ If you are planning to contribute code, design, or dataset research, **please co
 
 ## 💻 Local Development Workflow
 
-The project uses [Astro](https://astro.build/) with [MDX](https://mdxjs.com/) for content handling.
+The project uses [Astro](https://astro.build/) for content handling.
 
 ```bash
 # 1. Clone your fork
