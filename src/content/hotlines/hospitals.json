@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Zamboanga City Medical Center (ZCMC)",
+    "category": "hospitals",
+    "type": "Public / Government Hospital",
+    "phone": "(062) 991-0573",
+    "mobile": "",
+    "location": "Dr. D. Evangelista St., Sta. Catalina",
+    "sector": "Central",
+    "operatingHours": "24/7 ER"
+  },
+  {
+    "name": "Brent Hospital and Colleges",
+    "category": "hospitals",
+    "type": "Private Hospital",
+    "phone": "(062) 991-2311",
+    "mobile": "",
+    "location": "R.T. Lim Boulevard",
+    "sector": "Central",
+    "operatingHours": "24/7 ER"
+  },
+  {
+    "name": "Ciudad Medical de Zamboanga",
+    "category": "hospitals",
+    "type": "Private Hospital",
+    "phone": "(062) 992-7330",
+    "mobile": "",
+    "location": "Nunez Extension",
+    "sector": "Central",
+    "operatingHours": "24/7 ER"
+  },
+  {
+    "name": "West Metro Medical Center",
+    "category": "hospitals",
+    "type": "Private Hospital",
+    "phone": "(062) 991-2506",
+    "mobile": "",
+    "location": "Veterans Avenue",
+    "sector": "Central",
+    "operatingHours": "24/7 ER"
+  }
+]

@@ -6,11 +6,11 @@ This document tracks the progress of gathering public records for the Better Zam
 
 | Category | Description | Assignee | Status |
 | :--- | :--- | :--- | :--- |
-| **Officials** | Elected/appointed officials & contacts | [@RALPH22222](https://github.com/RALPH22222) | 🟡 In Progress |
+| **Officials** | Elected/appointed officials & contacts | [@dhaifzz](https://github.com/dhaifzz) | 🟡 In Progress |
 | **Budget** | Annual budget & expenditure reports | [@RALPH22222](https://github.com/RALPH22222) | 🔵 Planned |
 | **Projects** | Infrastructure & social programs | [@RALPH22222](https://github.com/RALPH22222) | 🔵 Planned |
 | **Ordinances** | Local laws & resolutions | [@RALPH22222](https://github.com/RALPH22222) | 🟡 In Progress |
-| **Contacts** | City hotlines & social media | [@RALPH22222](https://github.com/RALPH22222) | 🔵 Planned |
+| **Contacts** | City hotlines & social media (Emergency, Police, Fire, Hospitals, Utilities) | [@RALPH22222](https://github.com/RALPH22222) | 🟢 Completed |
 
 ---
 
