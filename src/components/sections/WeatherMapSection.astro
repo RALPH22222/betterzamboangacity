@@ -1,0 +1,45 @@
+---
+import WeatherWidget from '../WeatherWidget.astro';
+import MapWidget from '../MapWidget.astro';
+---
+
+<section class="py-16 md:py-24 bg-white font-sans border-t border-slate-100">
+  <div class="container mx-auto px-4">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+        Weather & Location
+      </h2>
+      <p class="text-slate-600 text-sm sm:text-base font-normal leading-relaxed">
+        Current conditions and interactive map of Zamboanga City
+      </p>
+    </div>
+
+    <!-- 2 Column Grid: Weather Left, Map Right -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch max-w-6xl mx-auto">
+      
+      <!-- Weather Widget Column -->
+      <div class="lg:col-span-5">
+        <WeatherWidget
+          city="Zamboanga City, PH"
+          temp="29°C"
+          condition="Partly Cloudy / Tropical Rain"
+          humidity="82%"
+          wind="12 km/h"
+          feelsLike="33°C"
+        />
+      </div>
+
+      <!-- Map Widget Column -->
+      <div class="lg:col-span-7">
+        <MapWidget
+          cityHallAddress="Zamboanga City Hall, N.S. Valderrosa St, Zamboanga City"
+          mapUrl="https://maps.google.com/maps?q=Zamboanga+City+Hall&t=&z=13&ie=UTF8&iwloc=&output=embed"
+        />
+      </div>
+
+    </div>
+
+  </div>
+</section>

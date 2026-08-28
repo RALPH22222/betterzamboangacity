@@ -14,7 +14,7 @@ The application architecture and static content pipeline are actively being cons
 
 ### Roadmap & Next Steps
 
-1. Configure the core Astro + MDX content collections schema for city documents and datasets.
+1. Configure the core Astro content collections schema for city documents and datasets.
 2. Index verified Zamboanga City public directories and emergency hotlines.
 3. Integrate interactive client islands for filtering services and barangay records.
 4. Finalize automated accessibility (a11y), link integrity, and responsive layout audits.
@@ -24,10 +24,10 @@ The application architecture and static content pipeline are actively being cons
 
 ## 🛠️ Technical Foundation
 
-The project is built on **Astro** with **MDX** for structured content delivery and React for interactive components.
+The project is built on **Astro** for structured content delivery and React for interactive components.
 
 * **Framework:** [Astro](https://astro.build/) (Static Site Generation / Islands Architecture)
-* **Content:** [MDX](https://mdxjs.com/) via Astro Content Collections
+* **Content:** Astro Content Collections
 * **Styling:** Tailwind CSS
 * **Deployment:** Vercel
 

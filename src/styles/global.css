@@ -1,1 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+    --font-kapwa-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-kapwa-mono: 'Roboto Mono', monospace;
+
+    /* Primary Brand Palette */
+    --color-primary-50: #e6f0fd;
+    --color-primary-100: #cce0fb;
+    --color-primary-200: #99c2f7;
+    --color-primary-300: #66a3f3;
+    --color-primary-400: #3385ef;
+    --color-primary-500: #0066eb;
+    --color-primary-600: #0052bc;
+    --color-primary-700: #003d8d;
+    --color-primary-800: #00295e;
+    --color-primary-900: #00142f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-kapwa-sans);
+  }
+}
+
+/* Base keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}

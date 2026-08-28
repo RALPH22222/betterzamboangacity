@@ -1,0 +1,73 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  subtext: string;
+  icon?: 'population' | 'land' | 'wonders' | 'barangays' | string;
+  externalLink?: boolean;
+}
+
+const {
+  label,
+  value,
+  subtext,
+  icon = "population",
+  externalLink = false,
+} = Astro.props;
+---
+
+<div class="bg-white p-6 sm:p-7 rounded-3xl border border-slate-100 shadow-xs hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between group h-full relative">
+  <div>
+    <!-- Top Row: Icon Badge & Optional External Arrow -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-11 h-11 rounded-2xl bg-blue-50/80 text-blue-600 border border-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+        {icon === 'population' && (
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        )}
+
+        {icon === 'land' && (
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+        )}
+
+        {icon === 'wonders' && (
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+        )}
+
+        {icon === 'barangays' && (
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        )}
+      </div>
+
+      {externalLink && (
+        <span class="text-slate-300 group-hover:text-blue-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </span>
+      )}
+    </div>
+
+    <!-- Label -->
+    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+      {label}
+    </div>
+
+    <!-- Value -->
+    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2 group-hover:text-blue-600 transition-colors">
+      {value}
+    </div>
+  </div>
+
+  <!-- Subtext -->
+  <div class="text-xs text-slate-500 font-medium pt-2 border-t border-slate-50">
+    {subtext}
+  </div>
+</div>
