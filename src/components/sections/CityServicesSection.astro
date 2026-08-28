@@ -1,0 +1,73 @@
+---
+import ServiceCard from '../ServiceCard.astro';
+
+const services = [
+  {
+    title: 'Animal Welfare',
+    description: 'Veterinary services, pet registration, animal bite treatment centers, and responsible pet ownership programs.',
+    href: '/services?category=Animal+Welfare',
+    icon: 'animal',
+    color: 'emerald',
+  },
+  {
+    title: 'Business, Trade and Investment',
+    description: 'Resources and services for starting, managing, and growing a business, including permits, taxes, and local investment opportunities.',
+    href: '/services?category=Business%2C+Trade+and+Investment',
+    icon: 'business',
+    color: 'blue',
+  },
+  {
+    title: 'Certificates and Vital Records',
+    description: 'Official documentation services including birth, marriage, and death certificates, as well as clearances and personal records.',
+    href: '/services?category=Certificates+and+Vital+Records',
+    icon: 'records',
+    color: 'amber',
+  },
+  {
+    title: 'Disaster Preparedness',
+    description: 'Emergency response resources, evacuation protocols, flood warnings, and community disaster risk reduction management.',
+    href: '/disaster',
+    icon: 'disaster',
+    color: 'red',
+  },
+];
+---
+
+<section class="py-16 md:py-24 bg-white font-sans">
+  <div class="container mx-auto px-4">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+        City Services
+      </h2>
+      <p class="text-slate-600 text-sm sm:text-base font-normal leading-relaxed">
+        Access all list of services quickly and easily. Find what you need for citizenship, business, education, and more.
+      </p>
+    </div>
+
+    <!-- 4 Card Grid Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {services.map((service) => (
+        <ServiceCard
+          title={service.title}
+          description={service.description}
+          href={service.href}
+          icon={service.icon}
+          color={service.color}
+        />
+      ))}
+    </div>
+
+    <!-- Bottom Center CTA Button -->
+    <div class="text-center">
+      <a
+        href="/services"
+        class="inline-flex items-center justify-center px-6 py-3.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-2xl shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+      >
+        View All Services
+      </a>
+    </div>
+
+  </div>
+</section>

@@ -1,23 +1,75 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import TopBar from '../components/TopBar.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+  showTopBar?: boolean;
+  showHeader?: boolean;
+  showFooter?: boolean;
+  mainClass?: string;
+}
+
+const {
+  title = 'Better Zamboanga City | Civic Transparency Portal',
+  description = 'A modernized, volunteer-driven portal to access government services, public data, and resources for the people of Zamboanga City.',
+  image = '/images/og-image.png',
+  canonicalURL = Astro.url.href,
+  showTopBar = true,
+  showHeader = true,
+  showFooter = true,
+  mainClass = 'grow flex flex-col focus:outline-none',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth h-full antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/images/ZC.svg" />
+    <link rel="apple-touch-icon" href="/images/ZC.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:site_name" content="Better Zamboanga City" />
+    <meta property="og:locale" content="en_PH" />
+
+    <!-- Client Router for smooth client-side page transitions -->
+    <ClientRouter />
+  </head>
+  <body class="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-blue-600 selection:text-white">
+    <!-- Skip to main content for Accessibility -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none"
+    >
+      Skip to main content
+    </a>
+
+    {showTopBar && <TopBar />}
+    {showHeader && <Header />}
+
+    <main id="main-content" class={mainClass} tabindex="-1">
+      <slot />
+    </main>
+
+    {showFooter && <Footer />}
+  </body>
+</html>

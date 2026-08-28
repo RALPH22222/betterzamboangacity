@@ -1,11 +1,17 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import HeroSection from '../components/sections/HeroSection.astro';
+import CityServicesSection from '../components/sections/CityServicesSection.astro';
+import EmergencyHotlinesSection from '../components/sections/EmergencyHotlinesSection.astro';
+import CityStatisticsSection from '../components/sections/CityStatisticsSection.astro';
+import WeatherMapSection from '../components/sections/WeatherMapSection.astro';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Better Zamboanga City | Civic Transparency & Services Portal">
+  <HeroSection />
+  <CityServicesSection />
+  <EmergencyHotlinesSection />
+  <CityStatisticsSection />
+  <WeatherMapSection />
 </Layout>

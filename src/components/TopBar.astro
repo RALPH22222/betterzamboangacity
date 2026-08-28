@@ -1,0 +1,79 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+
+const currentDateFormatted = new Date().toLocaleDateString('en-PH', {
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<aside 
+  aria-label="Emergency Hotlines and City Information" 
+  class={`relative bg-slate-50 border-b border-slate-200 text-xs font-sans text-slate-600 ${className}`}
+>
+  <!-- Ultra-Thin Vinta Pastel Theme Accent Top Stripe -->
+  <div class="h-[3px] w-full flex">
+    <div class="w-[16.66%] h-full bg-[#c084fc]"></div>
+    <div class="w-[16.66%] h-full bg-[#38bdf8]"></div>
+    <div class="w-[16.66%] h-full bg-[#4ade80]"></div>
+    <div class="w-[16.66%] h-full bg-[#475569]"></div>
+    <div class="w-[16.66%] h-full bg-[#fca5a5]"></div>
+    <div class="w-[16.66%] h-full bg-[#fde047]"></div>
+  </div>
+
+  <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+    <!-- Left / Center Info Group -->
+    <div class="flex items-center gap-3.5 text-slate-500 font-medium">
+      <!-- Vinta Flag Mini Badge Accent -->
+      <div class="hidden xs:flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/80 text-[10px] font-bold text-slate-700">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-[#fca5a5]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-[#fde047]"></span>
+        <span class="ml-1 text-[9px] uppercase tracking-wider text-slate-500 font-extrabold">Zamboanga</span>
+      </div>
+
+      <span class="inline-flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        {currentDateFormatted}
+      </span>
+
+      <span class="inline-flex items-center gap-1.5 text-slate-600">
+        <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <span>29°C</span>
+      </span>
+
+      <span class="hidden sm:inline-flex items-center gap-1 text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+        USD ₱57.50
+      </span>
+    </div>
+
+    <!-- Right Hotline Group -->
+    <div class="flex items-center gap-3 ml-auto">
+      <div class="flex items-center gap-1.5 text-red-600 font-semibold">
+        <svg class="w-3.5 h-3.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+        <a href="tel:911" class="hover:underline focus:outline-none focus:ring-1 focus:ring-red-500 rounded px-1" aria-label="Call Emergency 911">
+          911
+        </a>
+      </div>
+
+      <span class="text-slate-300">|</span>
+
+      <a href="tel:0629912345" class="text-slate-600 hover:text-blue-600 font-medium transition-colors hidden sm:inline" aria-label="Call CDRRMO Zamboanga City">
+        CDRRMO Zamboanga
+      </a>
+    </div>
+  </div>
+</aside>

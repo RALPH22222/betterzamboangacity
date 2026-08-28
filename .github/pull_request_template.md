@@ -2,7 +2,6 @@
 When submitting a Pull Request, ensure that:
 
 - [ ] The description clearly outlines the problem solved or data added.
-- [ ] MDX frontmatter adheres strictly to the schema in `src/content/config.ts`.
 - [ ] UI changes have been tested for accessibility (contrast, semantic tags, keyboard navigation) and mobile responsiveness.
 - [ ] Screenshots or preview links are attached for visible frontend modifications.
 - [ ] `npm run check` and `npm run build` run cleanly without errors.
