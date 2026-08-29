@@ -7,14 +7,15 @@ This document tracks the progress of gathering public records for the Better Zam
 | Category | Description | Assignee | Status |
 | :--- | :--- | :--- | :--- |
 | **Officials** | Elected/appointed officials & contacts | [@dhaifzz](https://github.com/dhaifzz) | 🟡 In Progress |
-| **Budget** | Annual budget & expenditure reports | [@RALPH22222](https://github.com/RALPH22222) | 🔵 Planned |
-| **Projects** | Infrastructure & social programs | [@RALPH22222](https://github.com/RALPH22222) | 🔵 Planned |
+| **Barangays** | List of barangays by district (District 1 & District 2) | [@dhaifzz](https://github.com/dhaifzz) | 🔵 Planned |
+| **Budget** | Annual budget & expenditure reports | Unassigned | 🔵 Planned |
+| **Projects** | Infrastructure & social programs | Unassigned | 🔵 Planned |
 | **Ordinances** | Local laws & resolutions | [@RALPH22222](https://github.com/RALPH22222) | 🟡 In Progress |
 | **Contacts** | City hotlines & social media (Emergency, Police, Fire, Hospitals, Utilities) | [@RALPH22222](https://github.com/RALPH22222) | 🟢 Completed |
 
 ---
 
-## 📂 Data Requirements by Category
+## 📂 Data Requirements by Category (Minimmum Requirements in Better LGU)
 
 ### 1. 🏛️ Officials
 *   **Requirements:** Names, titles, office locations, and official contact details.
@@ -31,7 +32,7 @@ This document tracks the progress of gathering public records for the Better Zam
 ### 4. ⚖️ Ordinances
 *   **Requirements:** Title, ordinance number, date passed, and a brief summary.
 *   **Data Source:** Import and verify data from [Ley de Zamboanga](https://zamboangacity-ordinance.vercel.app/).
-*   **Notes:** Verify that the schema matches our Astro MDX frontmatter requirements.
+*   **Notes:** Verify that the schema matches our Astro content collections frontmatter requirements.
 
 ### 5. 📞 Contact Information
 *   **Requirements:** Department names, phone numbers (hotlines), official email addresses, and verified social media pages.
