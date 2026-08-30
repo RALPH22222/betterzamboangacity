@@ -23,15 +23,6 @@ const navigation: NavItem[] = [
     ],
   },
   {
-    name: 'Travel',
-    href: '/travel',
-    dropdown: [
-      { name: 'Tourist Attractions', href: '/travel/attractions' },
-      { name: 'Sta. Cruz Pink Beach', href: '/travel/santa-cruz-island' },
-      { name: 'Hermosa Festival', href: '/travel/hermosa-festival' },
-    ],
-  },
-  {
     name: 'Services',
     href: '/services',
     dropdown: [
@@ -43,13 +34,8 @@ const navigation: NavItem[] = [
     ],
   },
   {
-    name: 'Transparency',
-    href: '/transparency',
-    dropdown: [
-      { name: 'City Budget & Finances', href: '/transparency/budget' },
-      { name: 'Ordinance Tracker', href: '/transparency/ordinances' },
-      { name: 'Public Bidding & Procurement', href: '/transparency/procurement' },
-    ],
+    name: 'Ordinances',
+    href: '/ordinances',
   },
   {
     name: 'Government',
@@ -73,6 +59,15 @@ const navigation: NavItem[] = [
 ---
 
 <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 font-sans shadow-xs transition-all">
+  <!-- Ultra-Thin Vinta Pastel Theme Accent Top Stripe (Shown on scroll) -->
+  <div id="header-color-bar" class="absolute top-0 left-0 h-[3px] w-full flex opacity-0 transition-opacity duration-300">
+    <div class="w-[20.66%] h-full bg-[#c084fc]"></div>
+    <div class="w-[20.66%] h-full bg-[#38bdf8]"></div>
+    <div class="w-[20.66%] h-full bg-[#4ade80]"></div>
+    <div class="w-[20.66%] h-full bg-[#475569]"></div>
+    <div class="w-[20.66%] h-full bg-[#fca5a5]"></div>
+    <div class="w-[20.66%] h-full bg-[#fde047]"></div>
+  </div>
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16 sm:h-20">
       
@@ -217,6 +212,7 @@ const navigation: NavItem[] = [
   const menu = document.getElementById('hdr-mobile-menu');
   const openIcon = document.getElementById('hdr-menu-icon');
   const closeIcon = document.getElementById('hdr-close-icon');
+  const colorBar = document.getElementById('header-color-bar');
 
   if (btn && menu && openIcon && closeIcon) {
     btn.addEventListener('click', () => {
@@ -228,4 +224,16 @@ const navigation: NavItem[] = [
       closeIcon.classList.toggle('hidden');
     });
   }
+
+  // Show color bar when TopBar disappears (scroll > 40px)
+  window.addEventListener('scroll', () => {
+    const cb = document.getElementById('header-color-bar');
+    if (window.scrollY > 40) {
+      cb?.classList.remove('opacity-0');
+      cb?.classList.add('opacity-100');
+    } else {
+      cb?.classList.remove('opacity-100');
+      cb?.classList.add('opacity-0');
+    }
+  });
 </script>
