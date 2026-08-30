@@ -1,0 +1,74 @@
+[
+  {
+    "station": "ZCPS 1",
+    "location": "Vitali",
+    "number": "0935-604-4139",
+    "sector": "East Coast"
+  },
+  {
+    "station": "ZCPS 2",
+    "location": "Curuan",
+    "number": "0935-457-2483",
+    "sector": "East Coast"
+  },
+  {
+    "station": "ZCPS 3",
+    "location": "Sangali",
+    "number": "0917-146-2240",
+    "sector": "East Coast"
+  },
+  {
+    "station": "ZCPS 4",
+    "location": "Culianan",
+    "number": "0975-333-8826",
+    "sector": "East Coast"
+  },
+  {
+    "station": "ZCPS 5",
+    "location": "Divisoria",
+    "number": "0917-677-8907",
+    "sector": "Central"
+  },
+  {
+    "station": "ZCPS 6",
+    "location": "Tetuan",
+    "number": "0997-746-5666",
+    "sector": "Central"
+  },
+  {
+    "station": "ZCPS 7",
+    "location": "Sta. Maria",
+    "number": "0917-307-8098",
+    "sector": "Central"
+  },
+  {
+    "station": "ZCPS 8",
+    "location": "Sinunuc",
+    "number": "0906-853-9806",
+    "sector": "West Coast"
+  },
+  {
+    "station": "ZCPS 9",
+    "location": "Ayala",
+    "number": "0917-864-8553",
+    "sector": "West Coast"
+  },
+  {
+    "station": "ZCPS 10",
+    "location": "Labuan",
+    "number": "0917-309-3887",
+    "sector": "West Coast"
+  },
+  {
+    "station": "ZCPS 11",
+    "location": "Central (Poblacion)",
+    "number": "0917-701-6340",
+    "sector": "Central"
+  },
+  {
+    "station": "ZCPS 12",
+    "location": "Talon-Talon",
+    "number": "0977-855-8138",
+    "sector": "East Coast"
+  }
+]

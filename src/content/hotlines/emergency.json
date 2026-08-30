@@ -1,0 +1,62 @@
+[
+  {
+    "id": "national-emergency-911",
+    "agency": "NATIONAL EMERGENCY*",
+    "category": "emergency",
+    "phone": "911",
+    "mobile": "911",
+    "address": "Citywide / Nationwide",
+    "operatingHours": "24/7",
+    "isEmergency": true,
+    "icon": "phone",
+    "color": "red"
+  },
+  {
+    "id": "zcdrmo-rescue",
+    "agency": "ZCDRRMO / RESCUE",
+    "category": "emergency",
+    "phone": "(062) 995-9601",
+    "mobile": "0917-710-2326",
+    "address": "Pasonanca, Zamboanga City",
+    "operatingHours": "24/7",
+    "isEmergency": true,
+    "icon": "shield",
+    "color": "emerald"
+  },
+  {
+    "id": "ems-ambulance",
+    "agency": "EMS / AMBULANCE",
+    "category": "emergency",
+    "phone": "(062) 926-1849",
+    "mobile": "",
+    "address": "Zamboanga City",
+    "operatingHours": "24/7",
+    "isEmergency": true,
+    "icon": "cross",
+    "color": "rose"
+  },
+  {
+    "id": "police-zcpo-hq",
+    "agency": "POLICE / ZCPO HQ",
+    "category": "emergency",
+    "phone": "0977-855-8138",
+    "mobile": "0977-855-8138",
+    "address": "Poblacion, Zamboanga City",
+    "operatingHours": "24/7",
+    "isEmergency": true,
+    "icon": "police",
+    "color": "blue"
+  },
+  {
+    "id": "task-force-zamboanga",
+    "agency": "TASK FORCE ZAMBOANGA",
+    "category": "emergency",
+    "phone": "0917-710-2326",
+    "mobile": "0917-710-2326",
+    "address": "Zamboanga City",
+    "operatingHours": "24/7",
+    "isEmergency": true,
+    "icon": "shield",
+    "color": "amber"
+  }
+]
