@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 import TopBar from '../components/TopBar.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -53,6 +54,9 @@ const {
 
     <!-- Client Router for smooth client-side page transitions -->
     <ClientRouter />
+
+    <!-- Vercel Web Analytics -->
+    <Analytics />
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-blue-600 selection:text-white">
     <!-- Skip to main content for Accessibility -->
