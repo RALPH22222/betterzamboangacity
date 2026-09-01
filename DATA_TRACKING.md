@@ -8,8 +8,9 @@ This document tracks the progress of gathering public records for the Better Zam
 | :--- | :--- | :--- | :--- |
 | **Officials** | Elected/appointed officials & contacts | [@dhaifzz](https://github.com/dhaifzz) | 🟡 In Progress |
 | **Barangays** | List of barangays by district (District 1 & District 2) | [@dhaifzz](https://github.com/dhaifzz) | 🔵 Planned |
-| **Budget** | Annual budget & expenditure reports | Unassigned | 🟡 In Progress  |
-| **Projects** | Infrastructure & social programs | Unassigned | 🟡 In Progress  |
+| **Budget** | Annual budget & expenditure reports | Unassigned | 🔵 Planned  |
+| **Projects** | Infrastructure & social programs | Unassigned | 🔵 Planned  |
+| **Flood Control Projects** | Flood Control Projects on District 1 and 2 | [@RALPH22222](https://github.com/RALPH22222) | 🟡 In Progress |
 | **Ordinances** | Local laws & resolutions | [@RALPH22222](https://github.com/RALPH22222) | 🟢 Completed |
 | **Contacts** | City hotlines & social media (Emergency, Police, Fire, Hospitals, Utilities) | [@RALPH22222](https://github.com/RALPH22222) | 🟢 Completed |
 
