@@ -5,16 +5,66 @@ interface Props {
 
 const { className = "" } = Astro.props;
 
-const currentDateFormatted = new Date().toLocaleDateString('en-PH', {
+// 1. Server Date & Time (PHT - Asia/Manila)
+const now = new Date();
+const serverDateStr = new Intl.DateTimeFormat('en-PH', {
+  timeZone: 'Asia/Manila',
   weekday: 'short',
   month: 'short',
   day: 'numeric',
-});
+}).format(now);
+
+const serverTimeStr = new Intl.DateTimeFormat('en-PH', {
+  timeZone: 'Asia/Manila',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+}).format(now);
+
+// 2. Live Weather Fetch on Server (Zamboanga City: Lat 6.9214, Lon 122.0790)
+let initialTemp = "--°C";
+let initialDesc = "Loading...";
+let initialDetails = "--% Hum";
+
+try {
+  const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.9214&longitude=122.0790&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m');
+  if (weatherRes.ok) {
+    const data = await weatherRes.json();
+    if (data && data.current) {
+      initialTemp = `${Math.round(data.current.temperature_2m)}°C`;
+      const code = data.current.weather_code ?? 0;
+      if (code === 0 || code === 1) initialDesc = 'Clear';
+      else if (code === 2 || code === 3) initialDesc = 'Partly Cloudy';
+      else if (code === 45 || code === 48) initialDesc = 'Foggy';
+      else if (code >= 51 && code <= 82) initialDesc = 'Rain Showers';
+      else if (code >= 95) initialDesc = 'Thunderstorm';
+      else initialDesc = 'Fair';
+      
+      initialDetails = `${data.current.relative_humidity_2m}% Hum • ${Math.round(data.current.wind_speed_10m)} km/h`;
+    }
+  }
+} catch (err) {
+  initialTemp = "28°C";
+  initialDesc = "Clear";
+  initialDetails = "77% Hum";
+}
+
+// 3. Live Forex USD/PHP Fetch on Server
+let initialForex = "₱62.44";
+try {
+  const forexRes = await fetch('https://open.er-api.com/v6/latest/USD');
+  if (forexRes.ok) {
+    const data = await forexRes.json();
+    if (data && data.rates && data.rates.PHP) {
+      initialForex = `₱${data.rates.PHP.toFixed(2)}`;
+    }
+  }
+} catch (err) {}
 ---
 
 <aside 
-  aria-label="Emergency Hotlines and City Information" 
-  class={`relative bg-slate-50 border-b border-slate-200 text-xs font-sans text-slate-600 ${className}`}
+  aria-label="Emergency Hotlines and City Live Information" 
+  class={`relative bg-slate-50 border-b border-slate-200/80 text-slate-600 text-xs font-sans shadow-xs z-50 ${className}`}
 >
   <!-- Ultra-Thin Vinta Pastel Theme Accent Top Stripe -->
   <div class="h-[3px] w-full flex">
@@ -26,54 +76,401 @@ const currentDateFormatted = new Date().toLocaleDateString('en-PH', {
     <div class="w-[16.66%] h-full bg-[#fde047]"></div>
   </div>
 
-  <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
-    <!-- Left / Center Info Group -->
-    <div class="flex items-center gap-3.5 text-slate-500 font-medium">
-      <!-- Vinta Flag Mini Badge Accent -->
-      <div class="hidden xs:flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/80 text-[10px] font-bold text-slate-700">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#fca5a5]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#fde047]"></span>
-        <span class="ml-1 text-[9px] uppercase tracking-wider text-slate-500 font-extrabold">Zamboanga</span>
+  <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-y-2 gap-x-4 max-w-[1600px]">
+    
+    <!-- Left Section: City Badge & Live Time (PHT) -->
+    <div class="flex items-center gap-3 shrink-0">
+      <!-- Vinta Flag Mini Pill -->
+      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] font-bold text-slate-700 shadow-2xs">
+        <span class="flex items-center gap-0.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc]"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[#fca5a5]"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[#fde047]"></span>
+        </span>
+        <span class="ml-1 text-[9px] uppercase tracking-wider text-slate-600 font-extrabold">Zamboanga City</span>
       </div>
 
-      <span class="inline-flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <!-- Live PHT Date & Time Clock -->
+      <div class="flex items-center gap-1.5 text-slate-600 font-medium text-[11px] sm:text-xs">
+        <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        {currentDateFormatted}
-      </span>
-
-      <span class="inline-flex items-center gap-1.5 text-slate-600">
-        <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-        <span>29°C</span>
-      </span>
-
-      <span class="hidden sm:inline-flex items-center gap-1 text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
-        USD ₱57.50
-      </span>
+        <span id="topbar-date">{serverDateStr}</span>
+        <span class="text-slate-300">•</span>
+        <span id="topbar-clock" class="font-mono font-semibold text-slate-900">{serverTimeStr}</span>
+        <span class="text-[10px] text-slate-500 font-mono">PHT</span>
+      </div>
     </div>
 
-    <!-- Right Hotline Group -->
-    <div class="flex items-center gap-3 ml-auto">
-      <div class="flex items-center gap-1.5 text-red-600 font-semibold">
-        <svg class="w-3.5 h-3.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
-        <a href="tel:911" class="hover:underline focus:outline-none focus:ring-1 focus:ring-red-500 rounded px-1" aria-label="Call Emergency 911">
-          911
-        </a>
+    <!-- Center Section: Real-time Weather & USD/PHP Exchange Rate -->
+    <div class="hidden md:flex items-center gap-3 text-xs">
+      
+      <!-- Live Zamboanga Weather -->
+      <div 
+        id="topbar-weather-container" 
+        class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 transition-all hover:bg-slate-100/80 shadow-2xs"
+        title="Live Weather for Zamboanga City (Lat 6.92°, Lon 122.08°)"
+      >
+        <span id="topbar-weather-icon" class="inline-flex items-center text-amber-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </span>
+        <span id="topbar-weather-temp" class="font-bold text-slate-900">{initialTemp}</span>
+        <span id="topbar-weather-desc" class="text-slate-500 text-[11px]">{initialDesc}</span>
+        <span id="topbar-weather-details" class="hidden lg:inline-block text-[10px] text-slate-500 border-l border-slate-200 pl-1.5 ml-0.5">
+          {initialDetails}
+        </span>
       </div>
 
-      <span class="text-slate-300">|</span>
+      <!-- Live USD to PHP Rate -->
+      <div 
+        id="topbar-forex-container" 
+        class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50/90 border border-emerald-200/80 text-emerald-800 font-medium text-[11px] sm:text-xs shadow-2xs"
+        title="Live Market USD to PHP Exchange Rate"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-emerald-700 font-bold">USD/PHP:</span>
+        <span id="topbar-forex-rate" class="font-mono font-semibold text-emerald-900">{initialForex}</span>
+      </div>
+    </div>
 
-      <a href="tel:0629912345" class="text-slate-600 hover:text-blue-600 font-medium transition-colors hidden sm:inline" aria-label="Call CDRRMO Zamboanga City">
-        CDRRMO Zamboanga
+    <!-- Right Section: Emergency Hotlines & Popover -->
+    <div class="flex items-center gap-2.5 ml-auto">
+      
+      <!-- 911 Emergency Hot Pill -->
+      <a 
+        href="tel:911" 
+        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-[11px] shadow-2xs transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 group"
+        aria-label="Call National Emergency 911"
+      >
+        <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>911 Emergency</span>
       </a>
+
+      <!-- City Hotlines Menu Trigger Button -->
+      <div class="relative">
+        <button
+          id="topbar-hotlines-btn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-2xs cursor-pointer"
+          aria-expanded="false"
+          aria-controls="topbar-hotlines-menu"
+        >
+          <svg class="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          <span class="hidden sm:inline">ZC Hotlines</span>
+          <span class="sm:hidden">Hotlines</span>
+          <svg id="topbar-hotlines-arrow" class="w-3 h-3 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Hotline Popover Panel -->
+        <div
+          id="topbar-hotlines-menu"
+          class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-4 text-slate-700 animate-fade-in"
+          role="dialog"
+          aria-label="Zamboanga City Emergency Directory"
+        >
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-xl bg-red-50 text-red-600 border border-red-100">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+              <div>
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Zamboanga Emergency Directory</h4>
+                <p class="text-[10px] text-slate-500">Tap any number to call immediately</p>
+              </div>
+            </div>
+            <button id="topbar-hotlines-close" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="space-y-3 max-h-72 overflow-y-auto pr-1 text-xs">
+            
+            <!-- Category 1: Disaster & Rescue -->
+            <div>
+              <div class="flex items-center gap-1.5 text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1.5">
+                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Disaster & Rescue Response</span>
+              </div>
+              <div class="space-y-1">
+                <a href="tel:0629913447" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-blue-700">CDRRMO Zamboanga</div>
+                    <div class="text-[10px] text-slate-500">Disaster Risk Reduction Office</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-200/80">
+                    (062) 991-3447
+                  </span>
+                </a>
+
+                <a href="tel:09177001111" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-blue-700">ZCPO Police Hotline</div>
+                    <div class="text-[10px] text-slate-500">City Police Station Command</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-200/80">
+                    0917-700-1111
+                  </span>
+                </a>
+
+                <a href="tel:0629912525" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-blue-700">BFP Fire Department</div>
+                    <div class="text-[10px] text-slate-500">Bureau of Fire Protection Zamboanga</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-lg border border-blue-200/80">
+                    (062) 991-2525
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Category 2: Medical & Health -->
+            <div>
+              <div class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1.5">
+                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <span>Medical & Health Assistance</span>
+              </div>
+              <div class="space-y-1">
+                <a href="tel:0629912934" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-emerald-50/70 border border-slate-200/80 hover:border-emerald-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-emerald-700">ZCMC Medical Center</div>
+                    <div class="text-[10px] text-slate-500">Zamboanga City Medical Center ER</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200/80">
+                    (062) 991-2934
+                  </span>
+                </a>
+
+                <a href="tel:0629912104" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-emerald-50/70 border border-slate-200/80 hover:border-emerald-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-emerald-700">Philippine Red Cross</div>
+                    <div class="text-[10px] text-slate-500">Zamboanga City Chapter</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200/80">
+                    (062) 991-2104
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Category 3: Essential Utilities -->
+            <div>
+              <div class="flex items-center gap-1.5 text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-1.5">
+                <svg class="w-3.5 h-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Public Utilities & Services</span>
+              </div>
+              <div class="space-y-1">
+                <a href="tel:0629912170" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/80 hover:border-amber-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-amber-700">ZAMCELCO (Power)</div>
+                    <div class="text-[10px] text-slate-500">Electric Cooperative Hotline</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200/80">
+                    (062) 991-2170
+                  </span>
+                </a>
+
+                <a href="tel:0629911556" class="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/80 hover:border-amber-200 transition-all group">
+                  <div>
+                    <div class="font-bold text-slate-900 group-hover:text-amber-700">ZCWD (Water District)</div>
+                    <div class="text-[10px] text-slate-500">Water Supply & Leak Report</div>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200/80">
+                    (062) 991-1556
+                  </span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+            <span>Official Zamboanga City Hotlines</span>
+            <a href="/disaster" class="text-blue-600 hover:underline font-semibold">View Disaster Hub →</a>
+          </div>
+        </div>
+      </div>
+
     </div>
+
   </div>
 </aside>
+
+<script>
+  function initTopBarLogic() {
+    // 1. Live Philippine Standard Time (PHT) Clock
+    const dateEl = document.getElementById('topbar-date');
+    const clockEl = document.getElementById('topbar-clock');
+
+    function updateClock() {
+      const now = new Date();
+      if (dateEl) {
+        dateEl.textContent = new Intl.DateTimeFormat('en-PH', {
+          timeZone: 'Asia/Manila',
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        }).format(now);
+      }
+      if (clockEl) {
+        clockEl.textContent = new Intl.DateTimeFormat('en-PH', {
+          timeZone: 'Asia/Manila',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true,
+        }).format(now);
+      }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // 2. Real-time Weather Fetch for Zamboanga City (Lat: 6.9214, Lon: 122.0790)
+    const tempEl = document.getElementById('topbar-weather-temp');
+    const descEl = document.getElementById('topbar-weather-desc');
+    const iconEl = document.getElementById('topbar-weather-icon');
+    const detailsEl = document.getElementById('topbar-weather-details');
+
+    const svgSun = `<svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+    const svgCloud = `<svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" /></svg>`;
+    const svgRain = `<svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 16.2A4.5 4.5 0 0017.5 8h-1.8A7 7 0 104 14.9M16 14v6m-4-4v6m-4-4v6" /></svg>`;
+    const svgThunder = `<svg class="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
+
+    const weatherCodeMap: Record<number, { desc: string; iconSvg: string }> = {
+      0: { desc: 'Clear', iconSvg: svgSun },
+      1: { desc: 'Mainly Clear', iconSvg: svgSun },
+      2: { desc: 'Partly Cloudy', iconSvg: svgCloud },
+      3: { desc: 'Overcast', iconSvg: svgCloud },
+      45: { desc: 'Foggy', iconSvg: svgCloud },
+      48: { desc: 'Depositing Rime Fog', iconSvg: svgCloud },
+      51: { desc: 'Light Drizzle', iconSvg: svgRain },
+      53: { desc: 'Moderate Drizzle', iconSvg: svgRain },
+      55: { desc: 'Dense Drizzle', iconSvg: svgRain },
+      61: { desc: 'Slight Rain', iconSvg: svgRain },
+      63: { desc: 'Moderate Rain', iconSvg: svgRain },
+      65: { desc: 'Heavy Rain', iconSvg: svgRain },
+      80: { desc: 'Rain Showers', iconSvg: svgRain },
+      81: { desc: 'Moderate Showers', iconSvg: svgRain },
+      82: { desc: 'Violent Showers', iconSvg: svgRain },
+      95: { desc: 'Thunderstorm', iconSvg: svgThunder },
+      96: { desc: 'Thunderstorm & Hail', iconSvg: svgThunder },
+      99: { desc: 'Heavy Thunderstorm', iconSvg: svgThunder },
+    };
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.9214&longitude=122.0790&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.current) {
+          const temp = Math.round(data.current.temperature_2m);
+          const code = data.current.weather_code ?? 0;
+          const humidity = data.current.relative_humidity_2m;
+          const wind = Math.round(data.current.wind_speed_10m);
+
+          const weatherInfo = weatherCodeMap[code] || { desc: 'Fair', iconSvg: svgSun };
+
+          if (tempEl) tempEl.textContent = `${temp}°C`;
+          if (descEl) descEl.textContent = weatherInfo.desc;
+          if (iconEl) iconEl.innerHTML = weatherInfo.iconSvg;
+          if (detailsEl) detailsEl.textContent = `${humidity}% Hum • ${wind} km/h`;
+        }
+      } catch (err) {
+        console.warn('TopBar: Live weather fetch notice', err);
+      }
+    }
+
+    fetchWeather();
+
+    // 3. Real-time USD/PHP Exchange Rate Fetch
+    const forexEl = document.getElementById('topbar-forex-rate');
+    async function fetchForex() {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.rates && data.rates.PHP) {
+          const rate = data.rates.PHP.toFixed(2);
+          if (forexEl) forexEl.textContent = `₱${rate}`;
+        }
+      } catch (err) {
+        console.warn('TopBar: Live forex fetch notice', err);
+      }
+    }
+
+    fetchForex();
+
+    // 4. Hotlines Dropdown Toggle & Backdrop Handling
+    const hotlinesBtn = document.getElementById('topbar-hotlines-btn');
+    const hotlinesMenu = document.getElementById('topbar-hotlines-menu');
+    const hotlinesArrow = document.getElementById('topbar-hotlines-arrow');
+    const hotlinesClose = document.getElementById('topbar-hotlines-close');
+
+    if (hotlinesBtn && hotlinesMenu) {
+      const btn = hotlinesBtn;
+      const menu = hotlinesMenu;
+
+      function toggleMenu(show?: boolean) {
+        const isCurrentlyHidden = menu.classList.contains('hidden');
+        const shouldShow = show !== undefined ? show : isCurrentlyHidden;
+
+        if (shouldShow) {
+          menu.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+          if (hotlinesArrow) hotlinesArrow.classList.add('rotate-180');
+        } else {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (hotlinesArrow) hotlinesArrow.classList.remove('rotate-180');
+        }
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+      });
+
+      if (hotlinesClose) {
+        hotlinesClose.addEventListener('click', () => toggleMenu(false));
+      }
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target as Node) && !btn.contains(e.target as Node)) {
+          toggleMenu(false);
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') toggleMenu(false);
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initTopBarLogic);
+  if (document.readyState !== 'loading') {
+    initTopBarLogic();
+  }
+</script>
