@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FloodControlHeader from '../../components/flood-control/FloodControlHeader.astro';
+import FloodControlSidebar from '../../components/flood-control/FloodControlSidebar.astro';
+import FloodControlMap from '../../components/flood-control/FloodControlMap.astro';
+import FloodControlTable from '../../components/flood-control/FloodControlTable.astro';
+import FloodControlCharts from '../../components/flood-control/FloodControlCharts.astro';
+import FloodControlModal from '../../components/flood-control/FloodControlModal.astro';
+---
+
+<Layout title="Flood Control Infrastructure Command Center | Better Zamboanga City" mainClass="grow bg-slate-50 font-sans pb-16">
+  <!-- Leaflet CSS & JS for OpenStreetMap -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1600px] pt-6">
+    <!-- Header with Search, Executive KPIs & View Mode Controller -->
+    <FloodControlHeader />
+
+    <!-- Main Command Center Split Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Command Facets Sidebar (Desktop 3.5 cols / Mobile full) -->
+      <div class="lg:col-span-4 xl:col-span-3">
+        <FloodControlSidebar />
+      </div>
+
+      <!-- Right Command Main Area (Desktop 8.5 cols / Mobile full) -->
+      <main class="lg:col-span-8 xl:col-span-9 space-y-6">
+        
+        <div id="fc-map-container" class="fc-component-wrapper">
+          <FloodControlMap />
+        </div>
+
+        <div id="fc-table-container" class="fc-component-wrapper">
+          <FloodControlTable />
+        </div>
+
+        <div id="fc-analytics-container" class="fc-component-wrapper hidden">
+          <FloodControlCharts />
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Deep Project Inspection Drawer Modal -->
+  <FloodControlModal />
+</Layout>
+
+<script>
+  function initCommandCenterPage() {
+    window.addEventListener('fc-viewmode-change', (e: Event) => {
+      const customEvent = e as CustomEvent<{ mode: string }>;
+      const mode = customEvent.detail?.mode;
+      if (!mode) return;
+
+      const mapContainer = document.getElementById('fc-map-container');
+      const tableContainer = document.getElementById('fc-table-container');
+      const analyticsContainer = document.getElementById('fc-analytics-container');
+
+      if (!mapContainer || !tableContainer || !analyticsContainer) return;
+
+      if (mode === 'split') {
+        mapContainer.classList.remove('hidden');
+        tableContainer.classList.remove('hidden');
+        analyticsContainer.classList.add('hidden');
+      } else if (mode === 'map') {
+        mapContainer.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+        analyticsContainer.classList.add('hidden');
+      } else if (mode === 'table') {
+        mapContainer.classList.add('hidden');
+        tableContainer.classList.remove('hidden');
+        analyticsContainer.classList.add('hidden');
+      } else if (mode === 'analytics') {
+        mapContainer.classList.add('hidden');
+        tableContainer.classList.add('hidden');
+        analyticsContainer.classList.remove('hidden');
+      }
+
+      // Trigger Leaflet map recalculation when map container is shown
+      if (mode === 'split' || mode === 'map') {
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 100);
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCommandCenterPage);
+  if (document.readyState !== 'loading') {
+    initCommandCenterPage();
+  }
+</script>

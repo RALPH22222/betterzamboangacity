@@ -1,0 +1,41 @@
+---
+import { getFloodControlStats, formatPHP } from '../../data/flood-control-data';
+
+const stats = getFloodControlStats();
+---
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+  
+  <!-- Card 1: Total Projects -->
+  <div class="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs hover:border-slate-300 transition-colors">
+    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+      Total Projects
+    </div>
+    <div class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight flex items-baseline gap-2">
+      <span>{stats.totalProjects}</span>
+      <span class="text-xs font-medium text-slate-400 uppercase font-sans">Contracts</span>
+    </div>
+  </div>
+
+  <!-- Card 2: Total Contract Cost -->
+  <div class="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs hover:border-slate-300 transition-colors">
+    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+      Total Contract Cost
+    </div>
+    <div class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-mono truncate" title={formatPHP(stats.totalContractCost)}>
+      {formatPHP(stats.totalContractCost)}
+    </div>
+  </div>
+
+  <!-- Card 3: Unique Contractors -->
+  <div class="bg-white p-5 sm:p-6 rounded-xl border border-slate-200 shadow-2xs hover:border-slate-300 transition-colors">
+    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+      Unique Contractors
+    </div>
+    <div class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight flex items-baseline gap-2">
+      <span>{stats.uniqueContractorsCount}</span>
+      <span class="text-xs font-medium text-slate-400 uppercase font-sans">Firms</span>
+    </div>
+  </div>
+
+</div>

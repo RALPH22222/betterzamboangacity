@@ -1,0 +1,364 @@
+---
+import { floodControlProjects, formatPHP } from '../../data/flood-control-data';
+---
+
+<div id="fc-table-wrapper" class="bg-white rounded-xl border border-slate-200/80 shadow-2xs p-4 sm:p-5">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+    <div>
+      <h2 class="text-base font-semibold text-slate-900 tracking-tight flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Infrastructure Projects Directory</span>
+      </h2>
+      <p class="text-xs text-slate-500">
+        Showing 5 projects per page. Click any row to view full contract details.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 self-start sm:self-center">
+      <span id="fc-table-count" class="text-xs font-mono font-semibold px-2.5 py-1 rounded bg-slate-50 text-slate-700 border border-slate-200/60">
+        Showing 1–5 of {floodControlProjects.length} projects
+      </span>
+    </div>
+  </div>
+
+  <!-- Data Table Container -->
+  <div class="overflow-x-auto rounded-lg border border-slate-200/80 shadow-2xs">
+    <table class="w-full text-left border-collapse font-sans text-xs sm:text-sm">
+      <thead>
+        <tr class="bg-slate-50 border-b border-slate-200/80 font-semibold uppercase tracking-wider text-slate-600 text-xs">
+          <th scope="col" class="py-3.5 px-4 w-[32%] cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="description">
+            <div class="flex items-center gap-1">
+              <span>Project Description</span>
+              <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+              </svg>
+            </div>
+          </th>
+          <th scope="col" class="py-3.5 px-2.5 w-16 cursor-pointer hover:bg-slate-100/80 transition-colors text-center" data-sort="year">
+            Year
+          </th>
+          <th scope="col" class="py-3.5 px-3 w-28 cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="district">
+            District
+          </th>
+          <th scope="col" class="py-3.5 px-3 w-28 cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="barangay">
+            Barangay
+          </th>
+          <th scope="col" class="py-3.5 px-3.5 w-[20%] whitespace-nowrap cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="type">
+            Type of Work
+          </th>
+          <th scope="col" class="py-3.5 px-3.5 w-[20%] whitespace-nowrap cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="contractor">
+            Contractor
+          </th>
+          <th scope="col" class="py-3.5 px-3.5 text-right w-36 whitespace-nowrap cursor-pointer hover:bg-slate-100/80 transition-colors" data-sort="cost">
+            Contract Cost
+          </th>
+        </tr>
+      </thead>
+      <tbody id="fc-table-body" class="divide-y divide-slate-100">
+        {floodControlProjects.map((p) => {
+          const isD1 = p.district === 'District 1';
+          const formattedCost = formatPHP(p.contractCost);
+          const formattedAbc = p.abc ? formatPHP(p.abc) : 'N/A';
+          return (
+            <tr 
+              class="fc-row hover:bg-sky-50/40 cursor-pointer transition-colors group"
+              data-desc={p.description.toLowerCase()}
+              data-contractor={(p.contractor || '').toLowerCase()}
+              data-barangay={p.barangay.toLowerCase()}
+              data-district={p.district}
+              data-year={p.infraYear.toString()}
+              data-type={p.typeOfWork}
+              data-cost={p.contractCost.toString()}
+              data-title={p.description}
+              data-cost-formatted={formattedCost}
+              data-abc-formatted={formattedAbc}
+              data-office={p.implementingOffice || 'Zamboanga City 2nd District Engineering Office'}
+            >
+              <!-- Description -->
+              <td class="py-3.5 px-3.5">
+                <div class="font-medium text-slate-900 text-sm leading-snug group-hover:text-sky-700 transition-colors">
+                  {p.description}
+                </div>
+              </td>
+
+              <!-- Year -->
+              <td class="py-3.5 px-2 text-center whitespace-nowrap font-mono">
+                <span class="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">
+                  {p.infraYear}
+                </span>
+              </td>
+
+              <!-- District -->
+              <td class="py-3.5 px-3 whitespace-nowrap">
+                <span class={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold uppercase tracking-wider ${isD1 ? 'bg-sky-50 text-sky-700 border border-sky-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+                  {p.district}
+                </span>
+              </td>
+
+              <!-- Barangay -->
+              <td class="py-3.5 px-3.5 font-medium text-slate-800 whitespace-nowrap text-sm">
+                {p.barangay}
+              </td>
+
+              <!-- Type of Work Column -->
+              <td class="py-3.5 px-3.5 font-medium text-slate-800 text-xs sm:text-sm">
+                {p.typeOfWork}
+              </td>
+
+              <!-- Contractor -->
+              <td class="py-3.5 px-3.5 font-medium text-slate-800 text-sm">
+                <span class="text-slate-900 block" title={p.contractor}>
+                  {p.contractor || 'N/A'}
+                </span>
+              </td>
+
+              <!-- Contract Cost -->
+              <td class="py-3.5 px-3.5 text-right font-mono font-semibold text-slate-900 whitespace-nowrap text-sm">
+                {formattedCost}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls Footer (5 rows per page) -->
+  <div id="fc-table-pagination" class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm">
+    <button
+      id="fc-page-prev"
+      type="button"
+      class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer flex items-center gap-1"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span>Previous</span>
+    </button>
+
+    <div id="fc-page-status" class="font-mono font-medium text-slate-600">
+      Page 1 of 7
+    </div>
+
+    <button
+      id="fc-page-next"
+      type="button"
+      class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors cursor-pointer flex items-center gap-1"
+    >
+      <span>Next</span>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Empty state message -->
+  <div id="fc-table-empty" class="hidden p-8 text-center text-slate-400 space-y-2">
+    <svg class="w-10 h-10 mx-auto text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <p class="text-sm font-medium text-slate-600">No flood control projects found matching your search or filters.</p>
+  </div>
+</div>
+
+<script>
+  function initTableLogic() {
+    const countEl = document.getElementById('fc-table-count');
+    const tbody = document.getElementById('fc-table-body');
+    const emptyEl = document.getElementById('fc-table-empty');
+    const prevBtn = document.getElementById('fc-page-prev') as HTMLButtonElement | null;
+    const nextBtn = document.getElementById('fc-page-next') as HTMLButtonElement | null;
+    const pageStatusEl = document.getElementById('fc-page-status');
+
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('.fc-row')) as HTMLElement[];
+    const totalCount = rows.length;
+    const pageSize = 5;
+    let currentPage = 1;
+
+    let currentQuery = '';
+    let currentDistrict = '';
+    let currentYear = '';
+    let currentType = '';
+
+    function updatePagination() {
+      // 1. Get all matching rows
+      const matchingRows = rows.filter(row => {
+        const desc = row.getAttribute('data-desc') || '';
+        const contractor = row.getAttribute('data-contractor') || '';
+        const barangay = row.getAttribute('data-barangay') || '';
+        const district = row.getAttribute('data-district') || '';
+        const year = row.getAttribute('data-year') || '';
+        const type = row.getAttribute('data-type') || '';
+
+        const matchSearch = !currentQuery || 
+          desc.includes(currentQuery) || 
+          contractor.includes(currentQuery) || 
+          barangay.includes(currentQuery);
+
+        const matchDistrict = !currentDistrict || district === currentDistrict;
+        const matchYear = !currentYear || year === currentYear;
+        const matchType = !currentType || type === currentType;
+
+        return matchSearch && matchDistrict && matchYear && matchType;
+      });
+
+      const totalMatching = matchingRows.length;
+      const maxPages = Math.max(Math.ceil(totalMatching / pageSize), 1);
+
+      if (currentPage > maxPages) currentPage = maxPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+
+      // Hide all rows first
+      rows.forEach(r => r.classList.add('hidden'));
+
+      // Show only current page's matching rows
+      matchingRows.slice(startIndex, endIndex).forEach(r => r.classList.remove('hidden'));
+
+      // Update count & page status text
+      if (countEl) {
+        if (totalMatching === 0) {
+          countEl.textContent = `Showing 0 of 0 projects`;
+        } else {
+          const displayStart = startIndex + 1;
+          const displayEnd = Math.min(endIndex, totalMatching);
+          countEl.textContent = `Showing ${displayStart}–${displayEnd} of ${totalMatching} projects`;
+        }
+      }
+
+      if (pageStatusEl) {
+        pageStatusEl.textContent = `Page ${currentPage} of ${maxPages}`;
+      }
+
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= maxPages;
+
+      if (emptyEl) {
+        if (totalMatching === 0) emptyEl.classList.remove('hidden');
+        else emptyEl.classList.add('hidden');
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          updatePagination();
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        currentPage++;
+        updatePagination();
+      });
+    }
+
+    window.addEventListener('fc-search-update', (e: Event) => {
+      const customEvent = e as CustomEvent<{ query?: string }>;
+      const d = customEvent.detail;
+      currentQuery = d?.query || '';
+      currentPage = 1;
+      updatePagination();
+    });
+
+    window.addEventListener('fc-filter-update', (e: Event) => {
+      const customEvent = e as CustomEvent<{ district?: string; year?: string; type?: string }>;
+      const d = customEvent.detail;
+      currentDistrict = d?.district || '';
+      currentYear = d?.year || '';
+      currentType = d?.type || '';
+      currentPage = 1;
+      updatePagination();
+    });
+
+    // Row Click Inspection Event
+    rows.forEach(row => {
+      row.addEventListener('click', () => {
+        const d = {
+          title: row.getAttribute('data-title') || '',
+          district: row.getAttribute('data-district') || '',
+          year: row.getAttribute('data-year') || '',
+          type: row.getAttribute('data-type') || '',
+          cost: row.getAttribute('data-cost-formatted') || '',
+          abc: row.getAttribute('data-abc-formatted') || '',
+          barangay: row.getAttribute('data-barangay') || '',
+          contractor: row.getAttribute('data-contractor') || '',
+          implementingOffice: row.getAttribute('data-office') || 'Zamboanga City 2nd District Engineering Office'
+        };
+
+        window.dispatchEvent(new CustomEvent('fc-open-modal', { detail: d }));
+      });
+    });
+
+    // Sorting
+    const thEls = document.querySelectorAll('th[data-sort]');
+    let currentSort = '';
+    let sortAsc = true;
+
+    thEls.forEach(th => {
+      th.addEventListener('click', () => {
+        const sortKey = th.getAttribute('data-sort');
+        if (!sortKey) return;
+
+        if (currentSort === sortKey) {
+          sortAsc = !sortAsc;
+        } else {
+          currentSort = sortKey;
+          sortAsc = true;
+        }
+
+        rows.sort((a, b) => {
+          let valA = '';
+          let valB = '';
+
+          if (sortKey === 'cost') {
+            const numA = parseFloat(a.getAttribute('data-cost') || '0');
+            const numB = parseFloat(b.getAttribute('data-cost') || '0');
+            return sortAsc ? numA - numB : numB - numA;
+          } else if (sortKey === 'year') {
+            const numA = parseInt(a.getAttribute('data-year') || '0');
+            const numB = parseInt(b.getAttribute('data-year') || '0');
+            return sortAsc ? numA - numB : numB - numA;
+          } else if (sortKey === 'description') {
+            valA = a.getAttribute('data-desc') || '';
+            valB = b.getAttribute('data-desc') || '';
+          } else if (sortKey === 'barangay') {
+            valA = a.getAttribute('data-barangay') || '';
+            valB = b.getAttribute('data-barangay') || '';
+          } else if (sortKey === 'contractor') {
+            valA = a.getAttribute('data-contractor') || '';
+            valB = b.getAttribute('data-contractor') || '';
+          } else if (sortKey === 'district') {
+            valA = a.getAttribute('data-district') || '';
+            valB = b.getAttribute('data-district') || '';
+          } else if (sortKey === 'type') {
+            valA = a.getAttribute('data-type') || '';
+            valB = b.getAttribute('data-type') || '';
+          }
+
+          return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+
+        rows.forEach(r => tbody.appendChild(r));
+        currentPage = 1;
+        updatePagination();
+      });
+    });
+
+    // Initial pagination setup
+    updatePagination();
+  }
+
+  document.addEventListener('astro:page-load', initTableLogic);
+  if (document.readyState !== 'loading') {
+    initTableLogic();
+  }
+</script>
