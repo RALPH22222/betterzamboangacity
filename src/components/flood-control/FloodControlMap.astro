@@ -1,0 +1,239 @@
+---
+import { floodControlProjects } from '../../data/flood-control-data';
+---
+
+<div id="fc-map-wrapper" class="bg-white rounded-xl border border-slate-200/80 shadow-2xs p-4 sm:p-5">
+  <div class="flex items-center justify-between gap-4 mb-3">
+    <div>
+      <h2 class="text-sm font-semibold text-slate-900 tracking-tight flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+        <span>Geographic Command Map</span>
+      </h2>
+      <p class="text-xs text-slate-500">
+        Interactive map location of {floodControlProjects.length} DPWH flood control structures in Zamboanga City.
+      </p>
+    </div>
+
+    <!-- Map Pin Count Badge -->
+    <span id="fc-map-count" class="text-xs font-mono font-semibold px-2.5 py-1 rounded bg-sky-50 text-sky-700 border border-sky-200/80 shrink-0">
+      {floodControlProjects.length} Markers
+    </span>
+  </div>
+
+  <!-- Map Container -->
+  <div class="relative w-full h-[380px] sm:h-[420px] rounded-lg overflow-hidden border border-slate-200 shadow-inner z-10">
+    <div id="flood-control-map" class="w-full h-full"></div>
+  </div>
+
+  <!-- Map Legend Footer -->
+  <div class="mt-3 pt-2.5 flex flex-wrap items-center justify-between text-xs text-slate-600 border-t border-slate-100 gap-2 font-medium">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block border border-white"></span>
+        <span>District 1 (West Coast)</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block border border-white"></span>
+        <span>District 2 (East Coast)</span>
+      </div>
+    </div>
+    <span class="text-xs text-slate-400">Click any marker to inspect full contract details</span>
+  </div>
+</div>
+
+<script is:inline define:vars={{ floodControlProjects }}>
+  document.addEventListener('astro:page-load', initMap);
+  if (document.readyState !== 'loading') {
+    initMap();
+  }
+
+  function initMap() {
+    const mapElement = document.getElementById('flood-control-map');
+    if (!mapElement || mapElement.dataset.initialized === 'true') return;
+    if (typeof L === 'undefined') {
+      setTimeout(initMap, 100);
+      return;
+    }
+
+    mapElement.dataset.initialized = 'true';
+
+    const map = L.map('flood-control-map', {
+      center: [6.955, 122.02],
+      zoom: 11,
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
+
+    const createCustomIcon = (color) => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" width="26" height="26"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" stroke="#FFFFFF" stroke-width="1.5"/></svg>`;
+      return L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: svg,
+        iconSize: [26, 26],
+        iconAnchor: [13, 26],
+        popupAnchor: [0, -26]
+      });
+    };
+
+    const d1Icon = createCustomIcon('#0284c7');
+    const d2Icon = createCustomIcon('#f43f5e');
+
+    const markers = [];
+    const countEl = document.getElementById('fc-map-count');
+
+    floodControlProjects.forEach((proj) => {
+      if (!proj.lat || !proj.lng) return;
+
+      const isD1 = proj.district === 'District 1';
+      const icon = isD1 ? d1Icon : d2Icon;
+
+      const formattedCost = new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        maximumFractionDigits: 0
+      }).format(proj.contractCost);
+
+      const formattedAbc = proj.abc ? new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        maximumFractionDigits: 0
+      }).format(proj.abc) : 'N/A';
+
+      const popupContent = `
+        <div class="p-1 max-w-xs font-sans">
+          <div class="flex items-center gap-1.5 mb-1.5">
+            <span class="px-2 py-0.5 text-[10px] font-semibold uppercase rounded ${isD1 ? 'bg-sky-100 text-sky-800' : 'bg-rose-100 text-rose-800'}">
+              ${proj.district}
+            </span>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-slate-100 text-slate-700">
+              Year ${proj.infraYear}
+            </span>
+          </div>
+          <h4 class="text-xs font-semibold text-slate-900 leading-snug mb-1">
+            ${proj.description}
+          </h4>
+          <div class="text-[11px] text-slate-600 space-y-1 my-1.5 border-t border-b border-slate-100 py-1 font-sans">
+            <div><strong>Barangay:</strong> ${proj.barangay}</div>
+            <div><strong>Contractor:</strong> <span class="text-sky-800 font-medium">${proj.contractor || 'N/A'}</span></div>
+          </div>
+          <div class="flex items-center justify-between text-xs font-mono font-semibold text-slate-900">
+            <span>${formattedCost}</span>
+            <button 
+              type="button" 
+              class="fc-map-popup-inspect text-[11px] text-sky-600 underline font-sans font-medium cursor-pointer"
+            >
+              Inspect Details →
+            </button>
+          </div>
+        </div>
+      `;
+
+      const marker = L.marker([proj.lat, proj.lng], { icon })
+        .addTo(map)
+        .bindPopup(popupContent);
+
+      marker.projData = proj;
+      markers.push(marker);
+
+      marker.on('popupopen', () => {
+        setTimeout(() => {
+          const btn = document.querySelector('.fc-map-popup-inspect');
+          if (btn) {
+            btn.addEventListener('click', () => {
+              window.dispatchEvent(new CustomEvent('fc-open-modal', {
+                detail: {
+                  title: proj.description,
+                  district: proj.district,
+                  year: proj.infraYear,
+                  type: proj.typeOfWork,
+                  cost: formattedCost,
+                  abc: formattedAbc,
+                  barangay: proj.barangay,
+                  contractor: proj.contractor,
+                  implementingOffice: proj.implementingOffice || 'Zamboanga City 2nd District Engineering Office'
+                }
+              }));
+            });
+          }
+        }, 50);
+      });
+    });
+
+    let currentQuery = '';
+    let currentDistrict = '';
+    let currentYear = '';
+    let currentType = '';
+
+    function filterMap() {
+      let visibleCount = 0;
+      const activeGroup = [];
+
+      markers.forEach(m => {
+        const p = m.projData;
+        const matchSearch = !currentQuery || 
+          p.description.toLowerCase().includes(currentQuery) ||
+          p.barangay.toLowerCase().includes(currentQuery) ||
+          (p.contractor || '').toLowerCase().includes(currentQuery);
+
+        const matchDistrict = !currentDistrict || p.district === currentDistrict;
+        const matchYear = !currentYear || p.infraYear.toString() === currentYear;
+        const matchType = !currentType || p.typeOfWork === currentType;
+
+        if (matchSearch && matchDistrict && matchYear && matchType) {
+          map.addLayer(m);
+          activeGroup.push(m);
+          visibleCount++;
+        } else {
+          map.removeLayer(m);
+        }
+      });
+
+      if (countEl) {
+        countEl.textContent = `${visibleCount} Markers`;
+      }
+
+      if (activeGroup.length > 0) {
+        const group = new L.featureGroup(activeGroup);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
+
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 50);
+    }
+
+    window.addEventListener('fc-search-update', (e) => {
+      const customEvent = e;
+      currentQuery = customEvent.detail?.query || '';
+      filterMap();
+    });
+
+    window.addEventListener('fc-filter-update', (e) => {
+      const customEvent = e;
+      currentDistrict = customEvent.detail?.district || '';
+      currentYear = customEvent.detail?.year || '';
+      currentType = customEvent.detail?.type || '';
+      filterMap();
+    });
+
+    window.addEventListener('fc-viewmode-change', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+    });
+
+    window.addEventListener('resize', () => {
+      map.invalidateSize();
+    });
+  }
+</script>

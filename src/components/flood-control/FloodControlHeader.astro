@@ -1,0 +1,235 @@
+---
+import { getFloodControlStats, formatPHP } from '../../data/flood-control-data';
+
+const stats = getFloodControlStats();
+---
+
+<div class="mb-8 space-y-6">
+  <!-- Top Hero Header Row -->
+  <div class="bg-white rounded-xl border border-slate-200/80 shadow-2xs p-6 space-y-4">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <a
+            href="https://sumbongsapangulo.ph/flood-control-map/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded bg-sky-50 text-sky-700 border border-sky-100 hover:bg-sky-100 transition-colors"
+          >
+            Sumbong sa Pangulo Open Data
+          </a>
+          <span class="text-xs text-slate-400 font-mono font-medium">• Zamboanga City (Districts 1 & 2)</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+          Flood Control Infrastructure Command Center
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+          Interactive civic transparency directory for {stats.totalProjects} DPWH flood control structure contracts in Zamboanga City.
+        </p>
+      </div>
+
+      <!-- Action Buttons (Export CSV) -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          id="fc-export-btn"
+          type="button"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 rounded-lg shadow-2xs transition-colors cursor-pointer"
+        >
+          <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>Export Dataset (CSV)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Input & View Controller Bar -->
+    <div class="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+      <!-- Global Search Bar -->
+      <div class="md:col-span-8 relative">
+        <input
+          id="fc-global-search"
+          type="text"
+          placeholder="Search description, contractor or barangay"
+          class="w-full pl-9 pr-4 py-2.5 text-xs sm:text-sm border border-slate-200 rounded-lg bg-slate-50/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all font-medium text-slate-900 placeholder:text-slate-400"
+        />
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- View Switcher Tabs (Split View / Full Map / Directory Table / Analytics) -->
+      <div class="md:col-span-4 flex items-center justify-end gap-1 bg-slate-50 p-1 rounded-lg border border-slate-200/60">
+        <button
+          id="fc-viewmode-split"
+          type="button"
+          class="fc-viewmode-btn flex-1 py-1.5 px-2 text-xs font-bold rounded-md bg-white text-sky-700 border border-sky-200 shadow-2xs transition-colors cursor-pointer text-center"
+          data-viewmode="split"
+        >
+          Split View
+        </button>
+        <button
+          id="fc-viewmode-map"
+          type="button"
+          class="fc-viewmode-btn flex-1 py-1.5 px-2 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition-colors cursor-pointer text-center"
+          data-viewmode="map"
+        >
+          Full Map
+        </button>
+        <button
+          id="fc-viewmode-table"
+          type="button"
+          class="fc-viewmode-btn flex-1 py-1.5 px-2 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition-colors cursor-pointer text-center"
+          data-viewmode="table"
+        >
+          Table
+        </button>
+        <button
+          id="fc-viewmode-analytics"
+          type="button"
+          class="fc-viewmode-btn flex-1 py-1.5 px-2 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition-colors cursor-pointer text-center"
+          data-viewmode="analytics"
+        >
+          Analytics
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Executive Metric Callout Bar -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Infrastructure Budget</span>
+      <div class="text-lg sm:text-xl font-bold font-mono text-slate-900 mt-1 truncate" title={formatPHP(stats.totalContractCost)}>
+        {formatPHP(stats.totalContractCost)}
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Awarded Projects</span>
+      <div class="text-lg sm:text-xl font-bold text-slate-900 mt-1">
+        {stats.totalProjects} <span class="text-xs font-normal text-slate-400 font-sans">Contracts</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Average Contract Cost</span>
+      <div class="text-lg sm:text-xl font-bold font-mono text-slate-900 mt-1 truncate" title={formatPHP(stats.averageProjectCost)}>
+        {formatPHP(stats.averageProjectCost)}
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-2xs">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Awarded Contractors</span>
+      <div class="text-lg sm:text-xl font-bold text-slate-900 mt-1">
+        {stats.uniqueContractorsCount} <span class="text-xs font-normal text-slate-400 font-sans">Firms</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { floodControlProjects } from '../../data/flood-control-data';
+
+  function initHeaderScripts() {
+    // Detailed & Clean Export Data CSV Downloader
+    const exportBtn = document.getElementById('fc-export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const headers = [
+          'Contract ID',
+          'Project ID',
+          'District',
+          'Barangay',
+          'Infrastructure Year',
+          'Type of Work',
+          'Infrastructure Category',
+          'Awarded Contractor',
+          'Implementing Office',
+          'Approved Budget (ABC in PHP)',
+          'Awarded Contract Cost (PHP)',
+          'Budget Savings (PHP)',
+          'Budget Utilization Rate',
+          'Project Description',
+          'Latitude',
+          'Longitude'
+        ];
+
+        const escapeCSV = (val: any) => `"${String(val ?? '').replace(/"/g, '""')}"`;
+
+        const csvRows = [headers.map(escapeCSV).join(',')];
+
+        floodControlProjects.forEach(p => {
+          const abc = p.abc || 0;
+          const cost = p.contractCost || 0;
+          const savings = abc > 0 ? abc - cost : 0;
+          const utilization = abc > 0 ? `${((cost / abc) * 100).toFixed(2)}%` : '100.00%';
+
+          const row = [
+            escapeCSV(p.contractID || 'N/A'),
+            escapeCSV(p.projectID || 'N/A'),
+            escapeCSV(p.district || ''),
+            escapeCSV(p.barangay || ''),
+            p.infraYear || '',
+            escapeCSV(p.typeOfWork || ''),
+            escapeCSV(p.infraType || 'Flood Control Structures'),
+            escapeCSV(p.contractor || 'NOT SPECIFIED'),
+            escapeCSV(p.implementingOffice || 'Zamboanga City 2nd District Engineering Office'),
+            abc > 0 ? abc.toFixed(2) : '0.00',
+            cost > 0 ? cost.toFixed(2) : '0.00',
+            savings.toFixed(2),
+            escapeCSV(utilization),
+            escapeCSV(p.description || ''),
+            p.lat || '',
+            p.lng || ''
+          ];
+          csvRows.push(row.join(','));
+        });
+
+        // Add UTF-8 BOM (\uFEFF) for instant seamless opening in MS Excel & Google Sheets
+        const csvContent = '\uFEFF' + csvRows.join('\n');
+        const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(csvBlob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'zamboanga_city_flood_control_projects.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // Global Search Bar input trigger
+    const searchInput = document.getElementById('fc-global-search') as HTMLInputElement | null;
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const val = searchInput.value.trim().toLowerCase();
+        window.dispatchEvent(new CustomEvent('fc-search-update', { detail: { query: val } }));
+      });
+    }
+
+    // Viewmode Switcher buttons
+    const viewmodeBtns = document.querySelectorAll('.fc-viewmode-btn');
+    viewmodeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.getAttribute('data-viewmode');
+        if (!mode) return;
+
+        viewmodeBtns.forEach(b => {
+          b.classList.remove('bg-white', 'text-sky-700', 'border', 'border-sky-200', 'shadow-2xs', 'font-bold');
+          b.classList.add('text-slate-600', 'font-medium');
+        });
+        btn.classList.remove('text-slate-600', 'font-medium');
+        btn.classList.add('bg-white', 'text-sky-700', 'border', 'border-sky-200', 'shadow-2xs', 'font-bold');
+
+        window.dispatchEvent(new CustomEvent('fc-viewmode-change', { detail: { mode } }));
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHeaderScripts);
+  if (document.readyState !== 'loading') {
+    initHeaderScripts();
+  }
+</script>

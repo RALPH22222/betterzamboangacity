@@ -8,14 +8,40 @@ interface Props {
   city?: string;
 }
 
-const {
-  temp = "29°C",
-  condition = "Partly Cloudy / Tropical Rain",
-  humidity = "82%",
-  wind = "12 km/h",
-  feelsLike = "33°C",
-  city = "Zamboanga City, PH",
-} = Astro.props;
+const props = Astro.props;
+
+// Live Zamboanga City Weather Server Fetch
+let serverTemp = props.temp;
+let serverCondition = props.condition;
+let serverHumidity = props.humidity;
+let serverWind = props.wind;
+let serverFeelsLike = props.feelsLike;
+const city = props.city || "Zamboanga City, PH";
+
+try {
+  const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.9214&longitude=122.0790&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m');
+  if (res.ok) {
+    const data = await res.json();
+    if (data && data.current) {
+      serverTemp = `${Math.round(data.current.temperature_2m)}°C`;
+      serverFeelsLike = `${Math.round(data.current.apparent_temperature)}°C`;
+      serverHumidity = `${data.current.relative_humidity_2m}%`;
+      serverWind = `${Math.round(data.current.wind_speed_10m)} km/h`;
+      const code = data.current.weather_code ?? 0;
+      if (code === 0 || code === 1) serverCondition = 'Clear / Sunny';
+      else if (code === 2 || code === 3) serverCondition = 'Partly Cloudy';
+      else if (code >= 51 && code <= 82) serverCondition = 'Rain Showers';
+      else if (code >= 95) serverCondition = 'Thunderstorm';
+      else serverCondition = 'Fair';
+    }
+  }
+} catch (e) {}
+
+const temp = serverTemp || "28°C";
+const condition = serverCondition || "Clear / Tropical Breeze";
+const humidity = serverHumidity || "77%";
+const wind = serverWind || "6 km/h";
+const feelsLike = serverFeelsLike || "31°C";
 ---
 
 <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-blue-600/10 flex flex-col justify-between h-full relative overflow-hidden group">
@@ -41,18 +67,18 @@ const {
     <!-- Main Temperature & Condition Display -->
     <div class="flex items-center justify-between gap-4 mb-8">
       <div>
-        <div class="text-5xl sm:text-6xl font-black tracking-tight drop-shadow-sm font-sans">
+        <div id="widget-temp" class="text-5xl sm:text-6xl font-black tracking-tight drop-shadow-sm font-sans">
           {temp}
         </div>
-        <div class="text-sm font-medium text-blue-100 mt-1">
+        <div id="widget-condition" class="text-sm font-medium text-blue-100 mt-1">
           {condition}
         </div>
       </div>
 
-      <!-- Animated Cloud / Rain Icon -->
+      <!-- Animated Weather Icon -->
       <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-amber-300 shrink-0">
         <svg class="w-10 h-10 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       </div>
     </div>
@@ -61,15 +87,15 @@ const {
     <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center mb-6">
       <div>
         <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Humidity</div>
-        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{humidity}</div>
+        <div id="widget-humidity" class="text-sm sm:text-base font-bold text-white mt-0.5">{humidity}</div>
       </div>
       <div class="border-x border-white/15">
         <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Wind</div>
-        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{wind}</div>
+        <div id="widget-wind" class="text-sm sm:text-base font-bold text-white mt-0.5">{wind}</div>
       </div>
       <div>
         <div class="text-[10px] uppercase font-bold text-blue-200 tracking-wider">Feels Like</div>
-        <div class="text-sm sm:text-base font-bold text-white mt-0.5">{feelsLike}</div>
+        <div id="widget-feelslike" class="text-sm sm:text-base font-bold text-white mt-0.5">{feelsLike}</div>
       </div>
     </div>
   </div>
@@ -77,7 +103,7 @@ const {
   <!-- Detailed Forecast Footer Link -->
   <div class="pt-4 border-t border-white/15 text-center">
     <a
-      href="/weather"
+      href="/disaster"
       class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-100 hover:text-white transition-colors group/link"
     >
       <span>Click to view detailed forecast</span>
