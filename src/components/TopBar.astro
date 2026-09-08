@@ -139,71 +139,11 @@ try {
       <span class="h-4 w-px bg-slate-300"></span>
 
       <!-- Live Rotating Exchange Rate (Displays 1 rate at a time, rotates every 5s) -->
-      <div class="relative">
-        <button
-          id="topbar-forex-btn"
-          type="button"
-          class="flex items-center gap-2 text-slate-800 hover:text-emerald-700 transition-colors cursor-pointer group"
-          aria-expanded="false"
-          aria-controls="topbar-forex-menu"
-        >
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-          
-          <div id="topbar-forex-rotator" class="flex items-center gap-1.5 font-mono text-xs sm:text-[13px] transition-opacity duration-300">
-            <span id="rate-display" class="font-bold text-slate-900">{initialRates.USD ? `1 USD = ₱ ${initialRates.USD}` : '1 USD = ₱ --'}</span>
-          </div>
-        </button>
-
-        <!-- Dropdown Forex Rates Popover -->
-        <div
-          id="topbar-forex-menu"
-          class="hidden absolute left-0 top-full mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-4 text-slate-700 animate-fade-in"
-          role="dialog"
-          aria-label="Philippine Peso Exchange Rates Directory"
-        >
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="p-1.5 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </span>
-              <div>
-                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Philippine Peso (PHP) Directory</h4>
-                <p id="forex-last-updated" class="text-[10px] text-slate-500">{initialLastUpdated}</p>
-              </div>
-            </div>
-            <button id="topbar-forex-close" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Currency Search Input -->
-          <div class="mb-2.5">
-            <input 
-              id="forex-search-input" 
-              type="text" 
-              placeholder="Search 160+ currencies (e.g. USD, EUR, SAR, MYR)..." 
-              class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder:text-slate-400"
-            />
-          </div>
-
-          <!-- Scrollable Grid of All Exchange Rates -->
-          <div id="forex-rates-grid" class="grid grid-cols-2 gap-2 text-xs font-mono max-h-72 overflow-y-auto pr-1 mb-2.5">
-            {Object.entries(initialRates).map(([code, val]) => (
-              <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-                <span class="text-slate-600 font-sans font-semibold">{code}</span>
-                <span class="font-bold text-slate-900">1 {code} = ₱ {val}</span>
-              </div>
-            ))}
-          </div>
-
-          <div class="pt-2 border-t border-slate-100 text-[10px] text-slate-400 flex justify-between items-center">
-            <span>Rotates every 5s • Daily Live Feed</span>
-            <span class="text-emerald-600 font-semibold">Base: 1 PHP</span>
-          </div>
+      <!-- Live Rotating Exchange Rate (Read-only, no dropdown) -->
+      <div class="flex items-center gap-2 text-slate-800 cursor-default">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <div id="topbar-forex-rotator" class="flex items-center gap-1.5 font-mono text-xs sm:text-[13px] transition-opacity duration-300">
+          <span id="rate-display" class="font-bold text-slate-900">{initialRates.USD ? `1 USD = ₱ ${initialRates.USD}` : '1 USD = ₱ --'}</span>
         </div>
       </div>
 
@@ -311,31 +251,6 @@ try {
     let rotateCurrencies: string[] = [];
     let rotateIdx = 0;
 
-    const gridEl = document.getElementById('forex-rates-grid');
-    const searchInput = document.getElementById('forex-search-input') as HTMLInputElement | null;
-    const lastUpdatedEl = document.getElementById('forex-last-updated');
-
-    function renderForexGrid(filterText = '') {
-      if (!gridEl) return;
-      const term = filterText.trim().toUpperCase();
-      const keys = Object.keys(allCalculatedRates).filter(k => k.includes(term));
-
-      if (keys.length === 0) {
-        gridEl.innerHTML = `<div class="col-span-2 p-3 text-center text-slate-400 text-xs">No matching currency found</div>`;
-        return;
-      }
-
-      gridEl.innerHTML = keys.map(code => {
-        const val = allCalculatedRates[code];
-        return `
-          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between hover:bg-emerald-50/50 transition-colors">
-            <span class="text-slate-700 font-sans font-semibold">${code}</span>
-            <span class="font-bold text-slate-900">1 ${code} = ₱ ${val}</span>
-          </div>
-        `;
-      }).join('');
-    }
-
     function startRotator() {
       const displayEl = document.getElementById('rate-display');
       const rotatorContainer = document.getElementById('topbar-forex-rotator');
@@ -373,13 +288,7 @@ try {
           });
 
           allCalculatedRates = newCalculated;
-          rotateCurrencies = Object.keys(newCalculated); // Dynamically includes ALL 160+ currencies!
-
-          if (data.time_last_update_utc && lastUpdatedEl) {
-            lastUpdatedEl.textContent = `Updated: ${data.time_last_update_utc.slice(0, 16)} (Daily API Feed)`;
-          }
-
-          renderForexGrid(searchInput ? searchInput.value : '');
+          rotateCurrencies = Object.keys(newCalculated);
 
           const displayEl = document.getElementById('rate-display');
           if (displayEl && rotateIdx === 0 && allCalculatedRates.USD) {
@@ -391,55 +300,10 @@ try {
       }
     }
 
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        renderForexGrid(val);
-      });
-    }
-
     fetchForex();
     startRotator();
 
-    // 4. Safe Dropdown Toggle Logic
-    const forexBtn = document.getElementById('topbar-forex-btn');
-    const forexMenu = document.getElementById('topbar-forex-menu');
-    const forexClose = document.getElementById('topbar-forex-close');
 
-    function closeForex() {
-      if (forexMenu) forexMenu.classList.add('hidden');
-      if (forexBtn) forexBtn.setAttribute('aria-expanded', 'false');
-    }
-
-    if (forexBtn && forexMenu) {
-      forexBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isHidden = forexMenu.classList.contains('hidden');
-        if (isHidden) {
-          forexMenu.classList.remove('hidden');
-          forexBtn.setAttribute('aria-expanded', 'true');
-        } else {
-          closeForex();
-        }
-      });
-
-      if (forexClose) {
-        forexClose.addEventListener('click', () => closeForex());
-      }
-    }
-
-    document.addEventListener('click', (e) => {
-      const target = e.target as Node;
-      if (forexMenu && forexBtn && !forexMenu.contains(target) && !forexBtn.contains(target)) {
-        closeForex();
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeForex();
-      }
-    });
   }
 
   document.addEventListener('astro:page-load', initTopBarLogic);
