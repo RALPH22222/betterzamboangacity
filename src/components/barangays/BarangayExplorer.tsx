@@ -149,7 +149,7 @@ export const BarangayExplorer: React.FC = () => {
               {paginatedBarangays.map((b) => (
                 <a
                   key={b.id}
-                  href={`/zamboanga/barangay-details?slug=${b.slug}`}
+                  href={`/government/barangays?slug=${b.slug}`}
                   className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-2xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between group cursor-pointer"
                 >
                   {/* Mini Vinta 6-Color Accent Ribbon Bar */}

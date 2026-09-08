@@ -1,0 +1,492 @@
+{
+  "Arena Blanco": {
+    "population": "13,848",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700001",
+    "category": "Urban"
+  },
+  "Ayala": {
+    "population": "27,119",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700002",
+    "category": "Urban"
+  },
+  "Baliwasan": {
+    "population": "19,806",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700004",
+    "category": "Urban"
+  },
+  "Baluno": {
+    "population": "4,060",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700005",
+    "category": "Rural"
+  },
+  "Boalan": {
+    "population": "11,849",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700010",
+    "category": "Urban"
+  },
+  "Bolong": {
+    "population": "8,041",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700011",
+    "category": "Urban"
+  },
+  "Buenavista": {
+    "population": "8,508",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700012",
+    "category": "Urban"
+  },
+  "Bunguiao": {
+    "population": "8,585",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700013",
+    "category": "Urban"
+  },
+  "Busay": {
+    "population": "2,172",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700014",
+    "category": "Rural"
+  },
+  "Cabaluay": {
+    "population": "8,868",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700015",
+    "category": "Urban"
+  },
+  "Cabatangan": {
+    "population": "18,402",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700016",
+    "category": "Urban"
+  },
+  "Cacao": {
+    "population": "1,555",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700017",
+    "category": "Rural"
+  },
+  "Calabasa": {
+    "population": "3,251",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700018",
+    "category": "Rural"
+  },
+  "Calarian": {
+    "population": "37,263",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700019",
+    "category": "Urban"
+  },
+  "Campo Islam": {
+    "population": "11,906",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700020",
+    "category": "Urban"
+  },
+  "Canelar": {
+    "population": "10,467",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700021",
+    "category": "Urban"
+  },
+  "Cawit": {
+    "population": "10,355",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700022",
+    "category": "Urban"
+  },
+  "Culianan": {
+    "population": "11,339",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700023",
+    "category": "Urban"
+  },
+  "Curuan": {
+    "population": "12,017",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700024",
+    "category": "Urban"
+  },
+  "Dita": {
+    "population": "2,240",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700025",
+    "category": "Rural"
+  },
+  "Divisoria": {
+    "population": "13,375",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700026",
+    "category": "Urban"
+  },
+  "Dulian (Upper Bunguiao)": {
+    "population": "2,664",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700027",
+    "category": "Rural"
+  },
+  "Dulian (Upper Pasonanca)": {
+    "population": "1,754",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700028",
+    "category": "Rural"
+  },
+  "Guisao": {
+    "population": "2,914",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700030",
+    "category": "Rural"
+  },
+  "Guiwan": {
+    "population": "13,579",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700031",
+    "category": "Urban"
+  },
+  "La Paz": {
+    "population": "7,864",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700032",
+    "category": "Urban"
+  },
+  "Labuan": {
+    "population": "15,683",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700033",
+    "category": "Urban"
+  },
+  "Lamisahan": {
+    "population": "3,111",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700034",
+    "category": "Rural"
+  },
+  "Landang Gua": {
+    "population": "3,075",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700035",
+    "category": "Rural"
+  },
+  "Landang Laum": {
+    "population": "3,106",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700036",
+    "category": "Rural"
+  },
+  "Lanzones": {
+    "population": "3,314",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700037",
+    "category": "Rural"
+  },
+  "Lapakan": {
+    "population": "1,940",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700038",
+    "category": "Rural"
+  },
+  "Latuan": {
+    "population": "2,804",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700039",
+    "category": "Rural"
+  },
+  "Limaong": {
+    "population": "4,796",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700040",
+    "category": "Rural"
+  },
+  "Limpapa": {
+    "population": "7,753",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700041",
+    "category": "Urban"
+  },
+  "Lubigan": {
+    "population": "3,541",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700042",
+    "category": "Rural"
+  },
+  "Lumayang": {
+    "population": "1,914",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700043",
+    "category": "Rural"
+  },
+  "Lumbangan": {
+    "population": "5,377",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700044",
+    "category": "Rural"
+  },
+  "Lunzuran": {
+    "population": "15,251",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700045",
+    "category": "Urban"
+  },
+  "Maasin": {
+    "population": "11,221",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700046",
+    "category": "Urban"
+  },
+  "Malagutay": {
+    "population": "8,341",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700047",
+    "category": "Urban"
+  },
+  "Mampang": {
+    "population": "31,302",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700048",
+    "category": "Urban"
+  },
+  "Manalipa": {
+    "population": "2,882",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700049",
+    "category": "Rural"
+  },
+  "Mangusu": {
+    "population": "5,615",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700050",
+    "category": "Urban"
+  },
+  "Manicahan": {
+    "population": "12,647",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700051",
+    "category": "Urban"
+  },
+  "Mariki": {
+    "population": "6,780",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700052",
+    "category": "Urban"
+  },
+  "Mercedes": {
+    "population": "24,302",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700053",
+    "category": "Urban"
+  },
+  "Muti": {
+    "population": "3,547",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700054",
+    "category": "Rural"
+  },
+  "Pamucutan": {
+    "population": "4,756",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700055",
+    "category": "Rural"
+  },
+  "Pangapuyan": {
+    "population": "837",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700056",
+    "category": "Rural"
+  },
+  "Panubigan": {
+    "population": "1,824",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700057",
+    "category": "Rural"
+  },
+  "Pasilmanta": {
+    "population": "3,314",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700058",
+    "category": "Rural"
+  },
+  "Pasonanca": {
+    "population": "30,369",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700059",
+    "category": "Urban"
+  },
+  "Patalon": {
+    "population": "11,899",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700060",
+    "category": "Urban"
+  },
+  "Barangay Zone I": {
+    "population": "4,962",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700061",
+    "category": "Urban"
+  },
+  "Barangay Zone II": {
+    "population": "1,548",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700062",
+    "category": "Urban"
+  },
+  "Barangay Zone III": {
+    "population": "1,123",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700063",
+    "category": "Urban"
+  },
+  "Barangay Zone IV": {
+    "population": "691",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700064",
+    "category": "Urban"
+  },
+  "Putik": {
+    "population": "22,296",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700065",
+    "category": "Urban"
+  },
+  "Quiniput": {
+    "population": "3,929",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700066",
+    "category": "Rural"
+  },
+  "Recodo": {
+    "population": "23,812",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700067",
+    "category": "Urban"
+  },
+  "Rio Hondo": {
+    "population": "8,892",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700068",
+    "category": "Urban"
+  },
+  "Salaan": {
+    "population": "4,691",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700069",
+    "category": "Rural"
+  },
+  "San Jose Cawa-cawa": {
+    "population": "3,497",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700070",
+    "category": "Urban"
+  },
+  "San Jose Gusu": {
+    "population": "16,379",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700071",
+    "category": "Urban"
+  },
+  "San Roque": {
+    "population": "29,190",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700072",
+    "category": "Urban"
+  },
+  "Sangali": {
+    "population": "28,440",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700073",
+    "category": "Urban"
+  },
+  "Santa Barbara": {
+    "population": "7,090",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700074",
+    "category": "Urban"
+  },
+  "Santa Catalina": {
+    "population": "16,156",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700075",
+    "category": "Urban"
+  },
+  "Santa Maria": {
+    "population": "25,041",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700076",
+    "category": "Urban"
+  },
+  "Santo Niño": {
+    "population": "4,133",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700077",
+    "category": "Urban"
+  },
+  "Sibulao": {
+    "population": "4,315",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700078",
+    "category": "Rural"
+  },
+  "Sinubung": {
+    "population": "3,965",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700079",
+    "category": "Rural"
+  },
+  "Sinunoc": {
+    "population": "23,568",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700080",
+    "category": "Urban"
+  },
+  "Tagasilay": {
+    "population": "4,159",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700081",
+    "category": "Rural"
+  },
+  "Taguiti": {
+    "population": "1,546",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700082",
+    "category": "Rural"
+  },
+  "Talabaan": {
+    "population": "6,050",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700083",
+    "category": "Urban"
+  },
+  "Talisayan": {
+    "population": "15,463",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700084",
+    "category": "Urban"
+  },
+  "Talon-talon": {
+    "population": "38,108",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700085",
+    "category": "Urban"
+  },
+  "Taluksangay": {
+    "population": "9,455",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700086",
+    "category": "Urban"
+  },
+  "Tetuan": {
+    "population": "29,831",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700087",
+    "category": "Urban"
+  },
+  "Tictapul": {
+    "population": "3,639",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700088",
+    "category": "Rural"
+  },
+  "Tigbalabag": {
+    "population": "2,420",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700089",
+    "category": "Rural"
+  },
+  "Tigtabon": {
+    "population": "6,266",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700090",
+    "category": "Urban"
+  },
+  "Tolosa": {
+    "population": "3,971",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700091",
+    "category": "Rural"
+  },
+  "Tugbungan": {
+    "population": "27,301",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700092",
+    "category": "Urban"
+  },
+  "Tulungatung": {
+    "population": "13,321",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700093",
+    "category": "Urban"
+  },
+  "Tumaga": {
+    "population": "33,320",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700094",
+    "category": "Urban"
+  },
+  "Tumalutab": {
+    "population": "3,416",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700095",
+    "category": "Rural"
+  },
+  "Tumitus": {
+    "population": "2,979",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700096",
+    "category": "Rural"
+  },
+  "Vitali": {
+    "population": "11,118",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700097",
+    "category": "Urban"
+  },
+  "Capisan": {
+    "population": "1,504",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700098",
+    "category": "Rural"
+  },
+  "Camino Nuevo": {
+    "population": "7,544",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700099",
+    "category": "Urban"
+  },
+  "Licomo": {
+    "population": "5,956",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700100",
+    "category": "Urban"
+  },
+  "Kasanyangan": {
+    "population": "29,697",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700101",
+    "category": "Urban"
+  },
+  "Pasobolong": {
+    "population": "5,997",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700102",
+    "category": "Urban"
+  },
+  "Victoria": {
+    "population": "3,933",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700103",
+    "category": "Rural"
+  },
+  "Zambowood": {
+    "population": "13,035",
+    "url": "https://psa.gov.ph/classification/psgc/brgydetail/0931700104",
+    "category": "Urban"
+  }
+}
