@@ -1,0 +1,281 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allBarangays, getBarangayBySlug, type Barangay } from '../../data/barangay-data';
+
+// Read 'slug' query parameter from URL (e.g. /zamboanga/barangay-details?slug=ayala)
+const slug = Astro.url.searchParams.get('slug') || 'ayala';
+const barangay = getBarangayBySlug(slug) || allBarangays[0];
+---
+
+<Layout title={`Barangay ${barangay.name} Official Portal - Zamboanga City`} mainClass="grow bg-slate-50 font-sans pb-16">
+  <main class="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-[1280px] w-full space-y-8">
+    
+    <!-- BREADCRUMB & BACK BUTTON -->
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <nav class="flex items-center gap-2 text-xs font-bold text-slate-500">
+        <a href="/" class="hover:text-[#0032A0] transition-colors">Home</a>
+        <span>/</span>
+        <a href="/zamboanga/barangays" class="hover:text-[#0032A0] transition-colors">98 Barangays</a>
+        <span>/</span>
+        <span class="text-slate-900 font-extrabold">Barangay {barangay.name}</span>
+      </nav>
+
+      <a
+        href="/zamboanga/barangays"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:text-[#0032A0] hover:border-blue-300 shadow-2xs transition-all"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>Back to 98 Barangays Directory</span>
+      </a>
+    </div>
+
+    <!-- MAIN BARANGAY OFFICIAL HERO BANNER -->
+    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs space-y-6">
+      
+      <!-- Signature Vinta 4-Color Top Ribbon Stripe -->
+      <div class="h-3 w-full flex">
+        <div class="flex-1 bg-[#0032A0]"></div>
+        <div class="flex-1 bg-[#1A9714]"></div>
+        <div class="flex-1 bg-[#F6CD18]"></div>
+        <div class="flex-1 bg-[#B32435]"></div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6 pt-2">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 pb-6">
+          <div class="flex items-center gap-5">
+            <!-- Official Zamboanga Seal Logo -->
+            <img 
+              src="/images/ZC.svg" 
+              alt="Official Zamboanga City Seal" 
+              class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 object-contain drop-shadow-xs" 
+            />
+
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider border ${
+                  barangay.district === 1 
+                    ? 'bg-amber-50 text-amber-900 border-amber-300' 
+                    : 'bg-blue-50 text-[#0032A0] border-blue-300'
+                }`}>
+                  <span class={`w-2 h-2 rounded-full ${barangay.district === 1 ? 'bg-amber-600' : 'bg-blue-600'}`}></span>
+                  District {barangay.district} · {barangay.coast}
+                </span>
+
+                <span class="text-xs font-bold px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-md border border-slate-200">
+                  {barangay.category} Settlement
+                </span>
+              </div>
+
+              <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                Barangay {barangay.name}
+              </h1>
+              
+              <p class="text-xs sm:text-sm font-semibold text-slate-500 flex items-center gap-2">
+                <span>City of Zamboanga</span>
+                <span>•</span>
+                <span>ZIP Code {barangay.zipCode}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+            <span class="text-xs font-bold px-4 py-2 bg-slate-50 text-slate-800 rounded-xl border border-slate-200 text-center">
+              Official Barangay Portal
+            </span>
+          </div>
+        </div>
+
+        <!-- 4 QUICK STAT CARDS -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1">
+            <span class="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">Population (2020)</span>
+            <div class="text-xl font-black text-slate-900">{barangay.population || 'Data Pending'}</div>
+            <span class="text-[10px] text-slate-500 font-semibold">Official PSA Census</span>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1">
+            <span class="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">Legislative District</span>
+            <div class="text-xl font-black text-[#0032A0]">District {barangay.district}</div>
+            <span class="text-[10px] text-slate-500 font-semibold">{barangay.coast}</span>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1">
+            <span class="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">Postal ZIP Code</span>
+            <div class="text-xl font-black text-slate-900 font-mono">{barangay.zipCode}</div>
+            <span class="text-[10px] text-slate-500 font-semibold">Zamboanga Post Office</span>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1">
+            <span class="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">Category</span>
+            <div class="text-xl font-black text-emerald-800">{barangay.category}</div>
+            <span class="text-[10px] text-slate-500 font-semibold">LGU Classification</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN CONTENT GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- LEFT COLUMN (2 COLS): OFFICIALS & SERVICES -->
+      <div class="lg:col-span-2 space-y-8">
+        
+        <!-- BARANGAY OFFICIALS DIRECTORY -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="space-y-1">
+              <span class="text-xs font-black uppercase text-[#0032A0] tracking-wider">Governance Directory</span>
+              <h2 class="text-2xl font-black text-slate-900">Barangay Officials</h2>
+            </div>
+            <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">Term 2023-2026</span>
+          </div>
+
+          <!-- Punong Barangay Card -->
+          <div class="p-5 bg-gradient-to-r from-blue-50/80 to-slate-50 border border-blue-200 rounded-xl flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-[#0032A0] text-white font-black text-xl flex items-center justify-center shrink-0 border-2 border-white shadow-xs">
+              PB
+            </div>
+            <div class="space-y-1">
+              <span class="text-[11px] font-extrabold uppercase text-[#0032A0] tracking-wider">Punong Barangay (Barangay Captain)</span>
+              <h3 class="text-lg font-black text-slate-900">
+                {barangay.barangayCaptain || `Hon. Barangay Captain (${barangay.name})`}
+              </h3>
+              <p class="text-xs text-slate-600 font-medium">Head of Barangay Government &amp; Executive Council</p>
+            </div>
+          </div>
+
+          <!-- Sangguniang Barangay Members (7 Kagawads) -->
+          <div class="space-y-3 pt-2">
+            <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider">Sangguniang Barangay Members</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between font-semibold">
+                  <span class="text-slate-800 font-bold">Barangay Kagawad {num}</span>
+                  <span class="text-[10px] text-slate-500">Councilor</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- SK Chairperson & Youth Council -->
+          <div class="p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl space-y-2 pt-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black uppercase text-emerald-900 tracking-wider">SK Chairperson</span>
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">Youth Council</span>
+            </div>
+            <div class="text-sm font-bold text-slate-900">Sangguniang Kabataan Chairman</div>
+            <p class="text-xs text-slate-600">Leads youth development programs &amp; sports initiatives in Barangay {barangay.name}.</p>
+          </div>
+        </div>
+
+        <!-- BARANGAY SERVICES & ISSUANCES -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+          <div class="space-y-1 border-b border-slate-100 pb-4">
+            <span class="text-xs font-black uppercase text-[#0032A0] tracking-wider">Public Administration</span>
+            <h2 class="text-2xl font-black text-slate-900">Barangay Services &amp; Clearances</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium">
+            <div class="p-4 border border-slate-200 rounded-xl space-y-2 bg-white hover:border-blue-300 transition-all">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#0032A0] font-bold flex items-center justify-center">
+                📄
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Barangay Clearance</h3>
+              <p class="text-slate-600 leading-relaxed">Issued for employment, business permits, and official identification verification.</p>
+            </div>
+
+            <div class="p-4 border border-slate-200 rounded-xl space-y-2 bg-white hover:border-blue-300 transition-all">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-900 font-bold flex items-center justify-center">
+                🏠
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Certificate of Residency</h3>
+              <p class="text-slate-600 leading-relaxed">Proof of residence for legal, school, and government assistance applications.</p>
+            </div>
+
+            <div class="p-4 border border-slate-200 rounded-xl space-y-2 bg-white hover:border-blue-300 transition-all">
+              <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-900 font-bold flex items-center justify-center">
+                🤝
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Certificate of Indigency</h3>
+              <p class="text-slate-600 leading-relaxed">Issued for medical, financial, and educational scholarship assistance.</p>
+            </div>
+
+            <div class="p-4 border border-slate-200 rounded-xl space-y-2 bg-white hover:border-blue-300 transition-all">
+              <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-900 font-bold flex items-center justify-center">
+                🏥
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm">Barangay Health Center</h3>
+              <p class="text-slate-600 leading-relaxed">Basic healthcare, immunizations, and maternal health services.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (1 COL): LOCATION, CONTACT & EMERGENCY -->
+      <div class="space-y-8">
+        
+        <!-- BARANGAY HALL LOCATION CARD -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs">
+          <div class="space-y-1 border-b border-slate-100 pb-3">
+            <span class="text-xs font-black uppercase text-[#0032A0] tracking-wider">Location &amp; Office</span>
+            <h3 class="text-lg font-black text-slate-900">Barangay Hall Address</h3>
+          </div>
+
+          <div class="space-y-3 text-xs font-medium text-slate-700">
+            <div class="flex items-start gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <svg class="w-4 h-4 text-[#0032A0] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              <div class="space-y-0.5">
+                <span class="font-bold text-slate-900 block">Barangay Hall Address:</span>
+                <p class="text-slate-600 leading-relaxed">{barangay.hallAddress || `Barangay Hall, Barangay ${barangay.name}, Zamboanga City`}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+              <svg class="w-4 h-4 text-[#0032A0] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <span class="font-bold text-slate-900 block">Office Hours:</span>
+                <span class="text-slate-600">Monday - Friday: 8:00 AM - 5:00 PM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMERGENCY HOTLINES & TANOD PATROL -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 space-y-4 shadow-xs">
+          <div class="space-y-1 border-b border-amber-200/80 pb-3">
+            <span class="text-xs font-black uppercase text-amber-900 tracking-wider">Emergency Contact</span>
+            <h3 class="text-lg font-black text-slate-900">Barangay Response &amp; Security</h3>
+          </div>
+
+          <div class="space-y-3 text-xs font-medium">
+            <div class="p-3 bg-white border border-amber-200 rounded-xl space-y-1">
+              <span class="text-slate-500 font-bold block">Barangay Hall Hotline:</span>
+              <div class="text-sm font-mono font-bold text-amber-950">{barangay.phone || '(062) 991-0000'}</div>
+            </div>
+
+            <div class="p-3 bg-white border border-amber-200 rounded-xl space-y-1">
+              <span class="text-slate-500 font-bold block">Barangay Tanod Outpost:</span>
+              <div class="text-slate-800 font-semibold">24/7 Peace &amp; Order Patrol Unit</div>
+            </div>
+
+            <div class="p-3 bg-white border border-amber-200 rounded-xl space-y-1">
+              <span class="text-slate-500 font-bold block">Zamboanga Emergency Call:</span>
+              <div class="text-sm font-mono font-bold text-[#0032A0]">911 / (062) 991-2400</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</Layout>

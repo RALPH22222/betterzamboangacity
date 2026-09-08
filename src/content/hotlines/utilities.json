@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ZAMCELCO (Electric Cooperative)",
+    "category": "utilities",
+    "service": "Electricity Supply & Power Interruptions",
+    "phone": "(062) 991-2117",
+    "mobile": "0917-307-8822",
+    "location": "Putik, Zamboanga City",
+    "sector": "East Coast"
+  },
+  {
+    "name": "ZCWD (Zamboanga City Water District)",
+    "category": "utilities",
+    "service": "Water Supply & Advisory Hotlines",
+    "phone": "(062) 991-1556",
+    "mobile": "0917-118-8993",
+    "location": "Pilar Street, Zamboanga City",
+    "sector": "Central"
+  }
+]

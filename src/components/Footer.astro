@@ -40,35 +40,60 @@ const columns: FooterColumn[] = [
     ],
   },
   {
-    title: 'Official',
+    title: 'Official Links',
     links: [
       { label: 'zamboangacity.gov.ph', href: 'https://zamboangacity.gov.ph/', external: true },
+      { label: 'Zamboanga City Map', href: '/about/map' },
+      { label: '98 Barangays Directory', href: '/zamboanga/barangays' },
     ],
   },
 ];
 ---
 
-<footer class="bg-slate-900 text-white font-sans mt-auto border-t border-slate-800">
+<footer class="bg-slate-950 text-white font-sans mt-auto relative">
+  
+  <!-- 🎨 Zamboanga Vinta Heritage Ribbon (Top Accent Stripe) -->
+  <div class="h-1.5 w-full flex">
+    <div class="flex-1 bg-[#c084fc]" title="Lavender Purple"></div>
+    <div class="flex-1 bg-[#38bdf8]" title="Sky Blue"></div>
+    <div class="flex-1 bg-[#4ade80]" title="Mint Green"></div>
+    <div class="flex-1 bg-[#475569]" title="Slate Navy"></div>
+    <div class="flex-1 bg-[#fca5a5]" title="Coral Pink"></div>
+    <div class="flex-1 bg-[#fde047]" title="Golden Sand"></div>
+  </div>
+
   <div class="container mx-auto px-4 py-12 md:py-16">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-10">
       
-      <!-- Brand Overview Column (Spans 2 columns on desktop) -->
+      <!-- Brand & Zamboanga Emblem Column (Spans 2 columns) -->
       <div class="lg:col-span-2">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
-            BZ
+        <a href="/" class="flex items-center gap-3 mb-4 group focus:outline-none" aria-label="Better Zamboanga City Home">
+          <!-- Official Zamboanga City Emblem Logo -->
+          <img src="/images/ZC.svg" alt="Zamboanga City Emblem" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform" />
+          
+          <div class="block leading-tight">
+            <div class="text-xl font-black tracking-tight text-white">
+              Better<span class="text-blue-500">Zamboanga</span><span class="text-amber-400 font-extrabold">City</span>
+            </div>
+            <span class="text-[11px] font-semibold text-amber-200/90 tracking-wide uppercase">Asia's Latin City · Civic Portal</span>
           </div>
-          <span class="font-bold text-xl tracking-tight text-white">Better Zamboanga</span>
-        </div>
+        </a>
+
         <p class="text-slate-400 text-xs sm:text-sm mb-6 leading-relaxed max-w-sm">
-          Open-source civic tech initiative making government information and public services accessible for Zamboangueños.
+          A volunteer-driven, open-source civic tech initiative making city services, emergency directories, and public records accessible for all Zamboangueños.
         </p>
+
+        <!-- Chavacano Badge / Zamboanga Pride Banner -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[11px] text-slate-300 font-medium mb-6">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Bienvenidos! · Orgullo de Zamboanga</span>
+        </div>
         
         <!-- Social Links -->
         <div class="flex items-center gap-3">
           <a
             href="https://www.facebook.com/BetterZamboangaCity"
-            class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-600 hover:border-blue-600 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit Better Zamboanga Facebook Page"
@@ -79,7 +104,7 @@ const columns: FooterColumn[] = [
           </a>
           <a
             href="https://github.com/BetterZamboanga"
-            class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 hover:border-slate-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit Better Zamboanga GitHub Repository"
@@ -119,9 +144,9 @@ const columns: FooterColumn[] = [
     </div>
 
     <!-- Bottom Copyright Disclaimer Bar -->
-    <div class="border-t border-slate-800 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+    <div class="border-t border-slate-800/80 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
       <p>
-        &copy; {new Date().getFullYear()} Better Zamboanga · Not an official government website
+        &copy; {new Date().getFullYear()} Better Zamboanga · Community-run civic portal. Not an official government website.
       </p>
       <a
         href="/site-map"
