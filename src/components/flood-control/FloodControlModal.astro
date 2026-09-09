@@ -1,0 +1,173 @@
+---
+---
+
+<!-- Light Translucent Backdrop Inspection Modal -->
+<div 
+  id="fc-project-modal" 
+  class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="fc-modal-title"
+>
+  <div 
+    class="bg-white rounded-xl border border-slate-200 shadow-xl max-w-xl w-full p-6 space-y-5 animate-fade-in relative text-slate-800"
+  >
+    <!-- Modal Header -->
+    <div class="flex items-start justify-between border-b border-slate-100 pb-4">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span id="fc-modal-district-badge" class="px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded bg-sky-50 text-sky-700 border border-sky-200">
+            District --
+          </span>
+          <span id="fc-modal-year-badge" class="px-3 py-1 text-xs font-mono font-semibold rounded bg-slate-100 text-slate-700 border border-slate-200/60">
+            Year ----
+          </span>
+          <span id="fc-modal-type-badge" class="px-3 py-1 text-xs font-medium rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+            Structure
+          </span>
+        </div>
+        <h3 id="fc-modal-title" class="text-base sm:text-lg font-semibold text-slate-900 leading-snug">
+          Project Title
+        </h3>
+      </div>
+      <button 
+        id="fc-modal-close-btn" 
+        type="button" 
+        class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+        aria-label="Close dialog"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contract Details Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+      
+      <!-- Contract Cost Box -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Contract Cost</span>
+        <div id="fc-modal-cost" class="text-xl font-semibold font-mono text-slate-900">
+          ₱0.00
+        </div>
+        <div id="fc-modal-abc" class="text-xs text-slate-500 font-mono">
+          Approved Budget (ABC): ₱0.00
+        </div>
+      </div>
+
+      <!-- Location Details Box (Uppercase) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+        <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Location</span>
+        <div id="fc-modal-barangay" class="text-sm sm:text-base font-semibold uppercase text-slate-900 leading-snug">
+          BARANGAY --, ZAMBOANGA CITY
+        </div>
+      </div>
+
+      <!-- Awarded Contractor (Uppercase) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1 sm:col-span-2">
+        <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Awarded Contractor</span>
+        <div id="fc-modal-contractor" class="text-sm sm:text-base font-semibold uppercase text-slate-900 leading-snug">
+          --
+        </div>
+      </div>
+
+      <!-- Implementing Office (Uppercase) -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1 sm:col-span-2">
+        <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Implementing Office</span>
+        <div id="fc-modal-office" class="text-xs sm:text-sm font-semibold uppercase text-slate-900 leading-snug">
+          ZAMBOANGA CITY 2ND DISTRICT ENGINEERING OFFICE
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Modal Footer Actions -->
+    <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <span class="text-xs text-slate-500 font-medium">
+        Source: <a href="https://sumbongsapangulo.ph/flood-control-map/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 underline font-medium">https://sumbongsapangulo.ph/flood-control-map/</a>
+      </span>
+      <button 
+        id="fc-modal-done-btn"
+        type="button" 
+        class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg shadow-2xs transition-colors cursor-pointer shrink-0"
+      >
+        Close Inspection
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function initModalLogic() {
+    const modal = document.getElementById('fc-project-modal');
+    const closeBtn = document.getElementById('fc-modal-close-btn');
+    const doneBtn = document.getElementById('fc-modal-done-btn');
+
+    function closeModal() {
+      if (modal) modal.classList.add('hidden');
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (doneBtn) doneBtn.addEventListener('click', closeModal);
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Listen for custom event to populate and show modal
+    window.addEventListener('fc-open-modal', (e: Event) => {
+      const customEvent = e as CustomEvent<{
+        title: string;
+        district: string;
+        year: number | string;
+        type: string;
+        cost: string;
+        abc: string;
+        barangay: string;
+        contractor: string;
+        implementingOffice?: string;
+      }>;
+
+      const d = customEvent.detail;
+      if (!d || !modal) return;
+
+      const titleEl = document.getElementById('fc-modal-title');
+      const distEl = document.getElementById('fc-modal-district-badge');
+      const yrEl = document.getElementById('fc-modal-year-badge');
+      const typeEl = document.getElementById('fc-modal-type-badge');
+      const costEl = document.getElementById('fc-modal-cost');
+      const abcEl = document.getElementById('fc-modal-abc');
+      const brgyEl = document.getElementById('fc-modal-barangay');
+      const contractorEl = document.getElementById('fc-modal-contractor');
+      const officeEl = document.getElementById('fc-modal-office');
+
+      if (titleEl) titleEl.textContent = d.title || 'Project Information';
+      if (distEl) distEl.textContent = (d.district || 'District').toUpperCase();
+      if (yrEl) yrEl.textContent = `Year ${d.year || '----'}`;
+      if (typeEl) typeEl.textContent = d.type || 'Structure';
+      if (costEl) costEl.textContent = d.cost || '₱0.00';
+      if (abcEl) abcEl.textContent = `Approved Budget (ABC): ${d.abc || 'N/A'}`;
+      if (brgyEl) {
+        const rawBrgy = d.barangay ? d.barangay.trim() : '';
+        brgyEl.textContent = rawBrgy ? `BARANGAY ${rawBrgy.toUpperCase()}, ZAMBOANGA CITY` : 'ZAMBOANGA CITY';
+      }
+      if (contractorEl) contractorEl.textContent = (d.contractor || 'N/A').toUpperCase();
+      if (officeEl) officeEl.textContent = (d.implementingOffice || 'ZAMBOANGA CITY 2ND DISTRICT ENGINEERING OFFICE').toUpperCase();
+
+      modal.classList.remove('hidden');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initModalLogic);
+  if (document.readyState !== 'loading') {
+    initModalLogic();
+  }
+</script>

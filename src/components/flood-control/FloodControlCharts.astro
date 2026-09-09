@@ -1,0 +1,614 @@
+---
+import { floodControlProjects, formatPHP } from '../../data/flood-control-data';
+
+// Helper for compact currency formatting in charts
+function formatCompactPHP(val: number): string {
+  if (!val || isNaN(val)) return '₱0';
+  if (val >= 1_000_000_000) return `₱${(val / 1_000_000_000).toFixed(2)}B`;
+  if (val >= 1_000_000) return `₱${(val / 1_000_000).toFixed(1)}M`;
+  if (val >= 1_000) return `₱${(val / 1_000).toFixed(0)}K`;
+  return `₱${val.toFixed(0)}`;
+}
+
+// 0. Approved Budget (ABC) vs Project Cost Overall & Yearly
+let totalABC = 0;
+let totalContractCost = 0;
+
+const budgetVsCostByYear: Record<number, { abc: number; cost: number; count: number }> = {
+  2018: { abc: 0, cost: 0, count: 0 },
+  2019: { abc: 0, cost: 0, count: 0 },
+  2020: { abc: 0, cost: 0, count: 0 },
+  2021: { abc: 0, cost: 0, count: 0 },
+  2022: { abc: 0, cost: 0, count: 0 },
+  2023: { abc: 0, cost: 0, count: 0 },
+  2024: { abc: 0, cost: 0, count: 0 },
+  2025: { abc: 0, cost: 0, count: 0 },
+};
+
+floodControlProjects.forEach(p => {
+  const abcVal = p.abc || 0;
+  const costVal = p.contractCost || 0;
+  totalABC += abcVal;
+  totalContractCost += costVal;
+
+  const y = p.infraYear || 2023;
+  if (budgetVsCostByYear[y]) {
+    budgetVsCostByYear[y].abc += abcVal;
+    budgetVsCostByYear[y].cost += costVal;
+    budgetVsCostByYear[y].count += 1;
+  }
+});
+
+const totalVariance = totalABC - totalContractCost;
+const totalSavingsPct = totalABC > 0 ? (totalVariance / totalABC) * 100 : 0;
+const overallUtilizationPct = totalABC > 0 ? Math.round((totalContractCost / totalABC) * 100) : 100;
+
+const maxYearlyBudgetAmount = Math.max(
+  ...Object.values(budgetVsCostByYear).flatMap(d => [d.abc, d.cost]),
+  1000000
+);
+
+// Realistic Y-Axis Ticks for Budget vs Cost Chart
+const budgetYAxisStep = 50_000_000;
+const budgetYAxisMax = Math.ceil(maxYearlyBudgetAmount / budgetYAxisStep) * budgetYAxisStep || 250_000_000;
+const budgetYAxisTicks = [
+  budgetYAxisMax,
+  budgetYAxisMax - budgetYAxisStep,
+  budgetYAxisMax - budgetYAxisStep * 2,
+  budgetYAxisMax - budgetYAxisStep * 3,
+  budgetYAxisMax - budgetYAxisStep * 4,
+  0
+].filter(v => v >= 0);
+
+// 1. Projects by Year (2018 to 2025)
+const yearsList = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+const yearData: Record<number, { count: number; cost: number }> = {
+  2018: { count: 0, cost: 0 },
+  2019: { count: 0, cost: 0 },
+  2020: { count: 0, cost: 0 },
+  2021: { count: 0, cost: 0 },
+  2022: { count: 0, cost: 0 },
+  2023: { count: 0, cost: 0 },
+  2024: { count: 0, cost: 0 },
+  2025: { count: 0, cost: 0 },
+};
+
+floodControlProjects.forEach(p => {
+  const y = p.infraYear || 2023;
+  if (yearData[y]) {
+    yearData[y].count += 1;
+    yearData[y].cost += p.contractCost;
+  }
+});
+const maxYCount = Math.max(...Object.values(yearData).map(d => d.count), 15);
+
+// Realistic Y-Axis Ticks for Projects Count Chart
+const countYAxisStep = 5;
+const countYAxisMax = Math.ceil(maxYCount / countYAxisStep) * countYAxisStep || 15;
+const countYAxisTicks = [
+  countYAxisMax,
+  countYAxisMax - countYAxisStep,
+  countYAxisMax - countYAxisStep * 2,
+  0
+].filter(v => v >= 0);
+
+// 2. District Location Breakdown
+let d1Count = 0, d1Cost = 0;
+let d2Count = 0, d2Cost = 0;
+floodControlProjects.forEach(p => {
+  if (p.district === 'District 1') {
+    d1Count++;
+    d1Cost += p.contractCost;
+  } else {
+    d2Count++;
+    d2Cost += p.contractCost;
+  }
+});
+const totalProjectsCount = floodControlProjects.length;
+const d1Pct = totalProjectsCount > 0 ? Math.round((d1Count / totalProjectsCount) * 100) : 82;
+const d2Pct = 100 - d1Pct;
+
+// 3. Types of Work Breakdown
+const typeCounts: Record<string, { count: number; cost: number }> = {};
+floodControlProjects.forEach(p => {
+  let t = p.typeOfWork || 'Other Structure';
+  if (t.includes('Drainage')) t = 'Construction of Drainage Structure';
+  else if (t.includes('Slope')) t = 'Construction of Slope Protection Structure';
+  else if (t.includes('Shore')) t = 'Construction of Shore Protection Structure';
+  else if (t.includes('Mitigation')) t = 'Construction of Flood Mitigation Structure';
+  
+  if (!typeCounts[t]) typeCounts[t] = { count: 0, cost: 0 };
+  typeCounts[t].count += 1;
+  typeCounts[t].cost += p.contractCost;
+});
+
+const typeItems = [
+  {
+    name: 'Construction of Flood Mitigation Structure',
+    label: 'Flood Mitigation Structure',
+    count: typeCounts['Construction of Flood Mitigation Structure']?.count || 20,
+    cost: typeCounts['Construction of Flood Mitigation Structure']?.cost || 0,
+    barClass: 'bg-sky-500',
+    dotClass: 'bg-sky-500'
+  },
+  {
+    name: 'Construction of Drainage Structure',
+    label: 'Drainage Structure',
+    count: typeCounts['Construction of Drainage Structure']?.count || 7,
+    cost: typeCounts['Construction of Drainage Structure']?.cost || 0,
+    barClass: 'bg-emerald-500',
+    dotClass: 'bg-emerald-500'
+  },
+  {
+    name: 'Construction of Shore Protection Structure',
+    label: 'Shore Protection Structure',
+    count: typeCounts['Construction of Shore Protection Structure']?.count || 4,
+    cost: typeCounts['Construction of Shore Protection Structure']?.cost || 0,
+    barClass: 'bg-amber-500',
+    dotClass: 'bg-amber-500'
+  },
+  {
+    name: 'Construction of Slope Protection Structure',
+    label: 'Slope Protection Structure',
+    count: typeCounts['Construction of Slope Protection Structure']?.count || 3,
+    cost: typeCounts['Construction of Slope Protection Structure']?.cost || 0,
+    barClass: 'bg-rose-500',
+    dotClass: 'bg-rose-500'
+  },
+];
+const totalTypeCount = typeItems.reduce((acc, i) => acc + i.count, 0);
+
+// 4. Top Contractors Breakdown
+const contractorStats: Record<string, { count: number; cost: number }> = {};
+floodControlProjects.forEach(p => {
+  const name = (p.contractor || 'OTHER CONTRACTOR').trim();
+  if (!contractorStats[name]) contractorStats[name] = { count: 0, cost: 0 };
+  contractorStats[name].count += 1;
+  contractorStats[name].cost += p.contractCost;
+});
+
+const contractorBarColors = ['bg-sky-500', 'bg-emerald-500', 'bg-indigo-500', 'bg-teal-500', 'bg-amber-500', 'bg-rose-500', 'bg-purple-500', 'bg-cyan-500'];
+
+const sortedTopContractors = Object.entries(contractorStats)
+  .map(([name, stat]) => ({ name, count: stat.count, cost: stat.cost }))
+  .sort((a, b) => b.count - a.count || b.cost - a.cost)
+  .slice(0, 8)
+  .map((item, idx) => ({ ...item, barClass: contractorBarColors[idx % contractorBarColors.length] }));
+
+const maxContractorCount = Math.max(...sortedTopContractors.map(c => c.count), 5);
+---
+
+<div class="space-y-6 mb-8 font-sans">
+  
+  <!-- Analytics Grid with 1x2 Featured Card + 2x2 Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- 1x2 Full-Width Card: Total Approved Budget vs Total Project Cost -->
+    <div class="lg:col-span-2 bg-white p-6 rounded-none border border-slate-200 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-3 border-b border-slate-200 gap-2">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Total Approved Budget vs. Total Project Cost</h3>
+            <p class="text-sm text-slate-500 mt-0.5">Financial comparison of Approved Budget for Contract (ABC) against Actual Contract Cost</p>
+          </div>
+        </div>
+
+        <!-- Metric KPI Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="p-4 rounded-none bg-indigo-50/60 border border-indigo-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs uppercase font-semibold text-indigo-700 tracking-wider">Total Approved Budget (ABC)</span>
+            </div>
+            <div class="text-xl sm:text-2xl font-bold font-mono text-slate-900 mt-2">
+              {formatPHP(totalABC)}
+            </div>
+            <div class="text-xs text-slate-500 font-medium mt-1">
+              Maximum allocated project funding
+            </div>
+          </div>
+
+          <div class="p-4 rounded-none bg-sky-50/60 border border-sky-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs uppercase font-semibold text-sky-700 tracking-wider">Total Project Cost</span> 
+            </div>
+            <div class="text-xl sm:text-2xl font-bold font-mono text-slate-900 mt-2">
+              {formatPHP(totalContractCost)}
+            </div>
+            <div class="text-xs text-slate-500 font-medium mt-1">
+              Actual contracted expenditure
+            </div>
+          </div>
+
+          <div class="p-4 rounded-none bg-emerald-50/60 border border-emerald-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs uppercase font-semibold text-emerald-700 tracking-wider">Net Savings / Difference</span>
+              <span class="px-1.5 py-0.5 text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 rounded-none">
+                -{totalSavingsPct.toFixed(1)}% Cost
+              </span>
+            </div>
+            <div class="text-xl sm:text-2xl font-bold font-mono text-emerald-700 mt-2">
+              {formatPHP(totalVariance)}
+            </div>
+            <div class="text-xs text-slate-500 font-medium mt-1">
+              Awarded under approved budget ceiling
+            </div>
+          </div>
+        </div>
+
+        <!-- Realistic Chart Plotting Area with Left Y-Axis Ticks & Gridlines -->
+        <div class="flex gap-3 pt-4 pb-2">
+          <!-- Left Y-Axis Scale Ticks -->
+          <div class="flex flex-col justify-between items-end text-xs font-mono text-slate-500 h-60 py-0.5 select-none pr-2 shrink-0 border-r border-slate-200">
+            {budgetYAxisTicks.map(tick => (
+              <span class="leading-none">{formatCompactPHP(tick)}</span>
+            ))}
+          </div>
+
+          <!-- Plot Area -->
+          <div class="flex-1 relative h-60">
+            <!-- Background Horizontal Grid Lines -->
+            <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+              {budgetYAxisTicks.map((_, idx) => (
+                <div class={`w-full border-b ${idx === budgetYAxisTicks.length - 1 ? 'border-slate-300 border-solid' : 'border-slate-100 border-dashed'}`}></div>
+              ))}
+            </div>
+
+            <!-- Realistic Flat-Top Column Bars -->
+            <div class="relative z-10 flex items-end justify-between h-full px-2 gap-2 sm:gap-4">
+              {yearsList.map(yr => {
+                const data = budgetVsCostByYear[yr] || { abc: 0, cost: 0, count: 0 };
+                const abcHeight = data.abc > 0 ? (data.abc / budgetYAxisMax) * 100 : 0;
+                const costHeight = data.cost > 0 ? (data.cost / budgetYAxisMax) * 100 : 0;
+                const hasData = data.abc > 0 || data.cost > 0;
+
+                return (
+                  <div class="flex-1 flex flex-col items-center group h-full justify-end">
+                    {hasData && (
+                      <div class="flex flex-col items-center mb-1 text-[10px] sm:text-xs font-semibold font-mono text-slate-700 opacity-90">
+                        <span>{formatCompactPHP(data.cost)}</span>
+                      </div>
+                    )}
+
+                    <div class="w-full flex items-end justify-center gap-1 h-full">
+                      <!-- ABC Bar (Indigo - Flat rectangular, no rounded edges) -->
+                      <div
+                        class="w-1/2 max-w-[28px] bg-indigo-600 hover:bg-indigo-700 transition-colors cursor-pointer rounded-none"
+                        style={`height: ${abcHeight}%;`}
+                        title={`${yr} Approved Budget (ABC): ${formatPHP(data.abc)} (${data.count} projects)`}
+                      ></div>
+                      <!-- Contract Cost Bar (Sky - Flat rectangular, no rounded edges) -->
+                      <div
+                        class="w-1/2 max-w-[28px] bg-sky-500 hover:bg-sky-600 transition-colors cursor-pointer rounded-none"
+                        style={`height: ${costHeight}%;`}
+                        title={`${yr} Actual Contract Cost: ${formatPHP(data.cost)} (${data.count} projects)`}
+                      ></div>
+                    </div>
+
+                    <span class="text-xs font-medium text-slate-600 mt-2 font-mono">
+                      {yr}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer & Legend -->
+      <div class="flex flex-col sm:flex-row items-center justify-between mt-6 pt-4 border-t border-slate-100 gap-3 text-sm text-slate-500 font-medium">
+        <div class="flex items-center gap-4 text-xs sm:text-sm">
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 bg-indigo-600 inline-block"></span>
+            <span>Approved Budget (ABC)</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-3 h-3 bg-sky-500 inline-block"></span>
+            <span>Contract Cost (Project Cost)</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-xs sm:text-sm text-slate-700">
+          <span>Overall Budget Utilization:</span>
+          <span class="font-bold text-slate-900">{overallUtilizationPct}%</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Chart 1: Projects by Year -->
+    <div class="bg-white p-6 rounded-none border border-slate-200 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Projects by Year</h3>
+            <p class="text-sm text-slate-500 mt-0.5">Timeline distribution (2018–2025)</p>
+          </div>
+          <span class="px-3 py-1 text-sm font-medium rounded-none bg-slate-100 text-slate-700 font-mono">
+            {floodControlProjects.length} Projects
+          </span>
+        </div>
+
+        <!-- Realistic Chart Plotting Area with Y-Axis -->
+        <div class="flex gap-3 pt-4 pb-2">
+          <!-- Left Y-Axis Scale Ticks -->
+          <div class="flex flex-col justify-between items-end text-xs font-mono text-slate-500 h-52 py-0.5 select-none pr-2 shrink-0 border-r border-slate-200">
+            {countYAxisTicks.map(tick => (
+              <span class="leading-none">{tick}</span>
+            ))}
+          </div>
+
+          <!-- Plot Area -->
+          <div class="flex-1 relative h-52">
+            <!-- Background Horizontal Grid Lines -->
+            <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+              {countYAxisTicks.map((_, idx) => (
+                <div class={`w-full border-b ${idx === countYAxisTicks.length - 1 ? 'border-slate-300 border-solid' : 'border-slate-100 border-dashed'}`}></div>
+              ))}
+            </div>
+
+            <!-- Flat Rectangular Column Bars -->
+            <div class="relative z-10 flex items-end justify-between h-full px-1 gap-2">
+              {yearsList.map(yr => {
+                const data = yearData[yr] || { count: 0, cost: 0 };
+                const count = data.count;
+                const heightPct = count > 0 ? (count / countYAxisMax) * 100 : 0;
+                return (
+                  <div class="flex-1 flex flex-col items-center group h-full justify-end">
+                    {count > 0 && (
+                      <span class="text-xs font-semibold text-slate-800 mb-1 font-mono">
+                        {count}
+                      </span>
+                    )}
+                    <div
+                      class="w-full max-w-[36px] bg-sky-500 hover:bg-sky-600 transition-colors cursor-pointer rounded-none"
+                      style={`height: ${heightPct}%;`}
+                      title={`${yr}: ${count} projects (${formatPHP(data.cost)})`}
+                    ></div>
+                    <span class="text-xs font-medium text-slate-600 mt-2 font-mono">
+                      {yr}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-sm text-slate-500 font-medium">
+        <span>DPWH Infrastructure Allocation</span>
+        <span class="font-mono font-semibold text-slate-700">8-Year Span</span>
+      </div>
+    </div>
+
+    <!-- Chart 2: District Location Breakdown -->
+    <div class="bg-white p-6 rounded-none border border-slate-200 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">District Distribution</h3>
+            <p class="text-sm text-slate-500 mt-0.5">District 1 (West Coast) vs District 2 (East Coast)</p>
+          </div>
+          <span class="px-3 py-1 text-sm font-medium rounded-none bg-slate-100 text-slate-700 font-mono">
+            2 Districts
+          </span>
+        </div>
+
+        <div class="space-y-6 py-2">
+          <!-- Multi-color Proportional Split Bar -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm font-medium text-slate-700">
+              <span class="flex items-center gap-2">
+                <span class="w-3 h-3 bg-sky-600 inline-block"></span>
+                <span>District 1 ({d1Pct}%)</span>
+              </span>
+              <span class="flex items-center gap-2">
+                <span class="w-3 h-3 bg-rose-500 inline-block"></span>
+                <span>District 2 ({d2Pct}%)</span>
+              </span>
+            </div>
+            <div class="w-full h-4 bg-slate-100 rounded-none overflow-hidden flex">
+              <div class="h-full bg-sky-600 transition-all duration-500 rounded-none" style={`width: ${d1Pct}%;`} title={`District 1: ${d1Count} projects (${d1Pct}%)`}></div>
+              <div class="h-full bg-rose-500 transition-all duration-500 rounded-none" style={`width: ${d2Pct}%;`} title={`District 2: ${d2Count} projects (${d2Pct}%)`}></div>
+            </div>
+          </div>
+
+          <!-- District Cards Side-by-Side -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <!-- District 1 Card -->
+            <div class="p-4 rounded-none bg-sky-50/60 border border-sky-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase font-semibold text-sky-700 tracking-wider">District 1 (West Coast)</span>
+                <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-sky-100 text-sky-800 rounded-none">
+                  {d1Count} Projects
+                </span>
+              </div>
+              <div class="text-lg sm:text-xl font-bold font-mono text-slate-900">
+                {formatPHP(d1Cost)}
+              </div>
+              <div class="text-xs text-slate-500 font-medium">
+                {d1Pct}% of total allocation
+              </div>
+            </div>
+
+            <!-- District 2 Card -->
+            <div class="p-4 rounded-none bg-rose-50/60 border border-rose-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase font-semibold text-rose-700 tracking-wider">District 2 (East Coast)</span>
+                <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-rose-100 text-rose-800 rounded-none">
+                  {d2Count} Projects
+                </span>
+              </div>
+              <div class="text-lg sm:text-xl font-bold font-mono text-slate-900">
+                {formatPHP(d2Cost)}
+              </div>
+              <div class="text-xs text-slate-500 font-medium">
+                {d2Pct}% of total allocation
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-sm text-slate-500 font-medium">
+        <span>Zamboanga City Legislative Divisions</span>
+        <span class="font-mono font-semibold text-slate-700">{formatPHP(d1Cost + d2Cost)}</span>
+      </div>
+    </div>
+
+    <!-- Chart 3: Types of Work Classification -->
+    <div class="bg-white p-6 rounded-none border border-slate-200 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Types of Work Classification</h3>
+            <p class="text-sm text-slate-500 mt-0.5">DPWH Infrastructure Category Breakdown</p>
+          </div>
+          <span class="px-3 py-1 text-sm font-medium rounded-none bg-slate-100 text-slate-700 font-mono">
+            4 Categories
+          </span>
+        </div>
+
+        <div class="space-y-4 py-1">
+          {typeItems.map(item => {
+            const pct = Math.round((item.count / totalTypeCount) * 100);
+            return (
+              <div class="space-y-1.5 p-3 rounded-none bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center justify-between text-sm">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <span class={`w-3 h-3 shrink-0 ${item.dotClass}`}></span>
+                    <span class="text-slate-900 font-medium text-sm">
+                      {item.label}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-3 shrink-0 font-mono text-sm">
+                    <span class="font-semibold text-slate-900">{item.count} projects</span>
+                    <span class="text-slate-500 font-medium">({pct}%)</span>
+                  </div>
+                </div>
+                <div class="w-full h-2 bg-slate-200/70 rounded-none overflow-hidden">
+                  <div
+                    class={`h-full rounded-none ${item.barClass}`}
+                    style={`width: ${pct}%;`}
+                  ></div>
+                </div>
+                <div class="text-xs text-slate-500 font-mono text-right font-medium">
+                  Total: {formatPHP(item.cost)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 text-sm text-slate-500 text-center font-medium">
+        Categorized by sumbongsapangulo.ph Data Records
+      </div>
+    </div>
+
+    <!-- Chart 4: Top Contractors -->
+    <div class="bg-white p-6 rounded-none border border-slate-200 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Top Awarded Contractors</h3>
+            <p class="text-sm text-slate-500 mt-0.5">Firms awarded highest volume of contracts</p>
+          </div>
+          <span class="px-3 py-1 text-sm font-medium rounded-none bg-slate-100 text-slate-700 font-mono">
+            Top 8
+          </span>
+        </div>
+
+        <div class="space-y-3.5 py-1">
+          {sortedTopContractors.map((c, idx) => {
+            const pct = Math.max(Math.round((c.count / maxContractorCount) * 100), 15);
+            return (
+              <div class="space-y-1.5 p-3 rounded-none bg-slate-50/70 border border-slate-100">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-sm">
+                  <div class="flex items-start gap-2.5 min-w-0">
+                    <span class="w-5 h-5 bg-sky-100 text-sky-800 flex items-center justify-center text-xs font-semibold shrink-0 font-mono mt-0.5">
+                      #{idx + 1}
+                    </span>
+                    <span class="text-slate-900 font-medium leading-snug break-words">
+                      {c.name}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-3 shrink-0 font-mono text-sm self-start sm:self-auto pl-7 sm:pl-0">
+                    <span class="font-semibold text-sky-700">{c.count} {c.count === 1 ? 'project' : 'projects'}</span>
+                    <span class="text-slate-600 font-medium">{formatPHP(c.cost)}</span>
+                  </div>
+                </div>
+                <div class="w-full h-2 bg-slate-200/70 rounded-none overflow-hidden">
+                  <div
+                    class={`h-full ${c.barClass} rounded-none`}
+                    style={`width: ${pct}%;`}
+                  ></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-sm text-slate-500 font-medium">
+        <span>Ranked by Awarded Contract Volume</span>
+        <span class="font-mono font-semibold text-slate-700">DPWH Directory</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Callout Banner -->
+  <div class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div>
+      <h4 class="text-base font-semibold text-slate-900 tracking-tight">Need Detailed Search & Filtering?</h4>
+      <p class="text-sm text-slate-500 mt-0.5">
+        Switch to Table directory view for full sortable columns, search, and contract inspection options.
+      </p>
+    </div>
+    <button
+      id="fc-goto-table-btn"
+      type="button"
+      class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg shadow-2xs transition-colors cursor-pointer shrink-0"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span>View Table Directory</span>
+    </button>
+  </div>
+
+  <!-- About This Data Footer Box -->
+  <div class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-2xs space-y-2">
+    <div class="flex items-center gap-2 text-slate-900">
+      <svg class="w-4 h-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h4 class="text-base font-semibold text-slate-900">About This Data</h4>
+    </div>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      This dashboard visualizes flood control infrastructure projects across Zamboanga City (District 1 & District 2). The data includes information about project locations, types, implementing offices, contractors, and contract costs. Use the filters and views to explore specific aspects of the data.
+    </p>
+    <div class="text-sm text-slate-500 pt-2 font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+      <span>Source: <a href="https://sumbongsapangulo.ph/flood-control-map/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800 underline font-medium">https://sumbongsapangulo.ph/flood-control-map/</a></span>
+      <span class="text-sky-700 font-semibold">Better Zamboanga City</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function initChartsScript() {
+    const btn = document.getElementById('fc-goto-table-btn');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const tableTabBtn = document.getElementById('fc-tab-table');
+        if (tableTabBtn) tableTabBtn.click();
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initChartsScript);
+  if (document.readyState !== 'loading') {
+    initChartsScript();
+  }
+</script>

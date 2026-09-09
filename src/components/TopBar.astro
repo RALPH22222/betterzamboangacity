@@ -5,16 +5,76 @@ interface Props {
 
 const { className = "" } = Astro.props;
 
-const currentDateFormatted = new Date().toLocaleDateString('en-PH', {
+// 1. Server Date & Time (PHT - Asia/Manila)
+const now = new Date();
+const serverDateStr = new Intl.DateTimeFormat('en-PH', {
+  timeZone: 'Asia/Manila',
   weekday: 'short',
   month: 'short',
   day: 'numeric',
-});
+}).format(now);
+
+const serverTimeStr = new Intl.DateTimeFormat('en-PH', {
+  timeZone: 'Asia/Manila',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+}).format(now);
+
+// 2. Live Weather Fetch on Server (Zamboanga City: Lat 6.9214, Lon 122.0790)
+let initialTemp = "--°C";
+let initialDesc = "Loading...";
+let initialDetails = "--% Hum";
+
+try {
+  const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.9214&longitude=122.0790&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m');
+  if (weatherRes.ok) {
+    const data = await weatherRes.json();
+    if (data && data.current) {
+      initialTemp = `${Math.round(data.current.temperature_2m)}°C`;
+      const code = data.current.weather_code ?? 0;
+      if (code === 0 || code === 1) initialDesc = 'Clear';
+      else if (code === 2 || code === 3) initialDesc = 'Partly Cloudy';
+      else if (code === 45 || code === 48) initialDesc = 'Foggy';
+      else if (code >= 51 && code <= 82) initialDesc = 'Rain Showers';
+      else if (code >= 95) initialDesc = 'Thunderstorm';
+      else initialDesc = 'Fair';
+      
+      initialDetails = `${data.current.relative_humidity_2m}% Hum • ${Math.round(data.current.wind_speed_10m)} km/h`;
+    }
+  }
+} catch (err) {
+  initialTemp = "28°C";
+  initialDesc = "Clear";
+  initialDetails = "77% Hum";
+}
+
+// 3. Live Forex PHP Base Rates Fetch on Server (https://open.er-api.com/v6/latest/PHP)
+let initialRates: Record<string, string> = {};
+let initialLastUpdated = "Daily Feed Active";
+
+try {
+  const forexRes = await fetch('https://open.er-api.com/v6/latest/PHP', { cache: 'no-store' });
+  if (forexRes.ok) {
+    const data = await forexRes.json();
+    if (data && data.rates) {
+      Object.keys(data.rates).forEach(k => {
+        if (data.rates[k] && data.rates[k] > 0) {
+          const phpVal = 1 / data.rates[k];
+          initialRates[k] = phpVal < 0.1 ? phpVal.toFixed(4) : phpVal.toFixed(2);
+        }
+      });
+      if (data.time_last_update_utc) {
+        initialLastUpdated = `Updated: ${data.time_last_update_utc.slice(0, 16)}`;
+      }
+    }
+  }
+} catch (err) {}
 ---
 
 <aside 
-  aria-label="Emergency Hotlines and City Information" 
-  class={`relative bg-slate-50 border-b border-slate-200 text-xs font-sans text-slate-600 ${className}`}
+  aria-label="Emergency Hotlines and City Live Information" 
+  class={`relative bg-slate-50 border-b border-slate-200/80 text-slate-700 text-xs sm:text-[13px] font-sans shadow-xs z-50 ${className}`}
 >
   <!-- Ultra-Thin Vinta Pastel Theme Accent Top Stripe -->
   <div class="h-[3px] w-full flex">
@@ -26,54 +86,228 @@ const currentDateFormatted = new Date().toLocaleDateString('en-PH', {
     <div class="w-[16.66%] h-full bg-[#fde047]"></div>
   </div>
 
-  <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
-    <!-- Left / Center Info Group -->
-    <div class="flex items-center gap-3.5 text-slate-500 font-medium">
-      <!-- Vinta Flag Mini Badge Accent -->
-      <div class="hidden xs:flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/80 text-[10px] font-bold text-slate-700">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#c084fc]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#4ade80]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#fca5a5]"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-[#fde047]"></span>
-        <span class="ml-1 text-[9px] uppercase tracking-wider text-slate-500 font-extrabold">Zamboanga</span>
+  <div class="container mx-auto px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-y-2 gap-x-5 max-w-[1600px]">
+    
+    <!-- Left Section: Clean City Branding & Live Time (PHT) -->
+    <div class="flex items-center gap-3 shrink-0">
+      <div class="flex items-center gap-1.5">
+        <span class="flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-[#c084fc]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#38bdf8]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#4ade80]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#fca5a5]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#fde047]"></span>
+        </span>
+        <span class="text-xs uppercase tracking-wider text-slate-900 font-extrabold">Zamboanga City</span>
       </div>
 
-      <span class="inline-flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        {currentDateFormatted}
-      </span>
+      <span class="h-4 w-px bg-slate-300"></span>
 
-      <span class="inline-flex items-center gap-1.5 text-slate-600">
-        <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      <!-- Live PHT Date & Time Clock -->
+      <div class="flex items-center gap-2 text-slate-700 font-medium text-xs sm:text-[13px]">
+        <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span>29°C</span>
-      </span>
-
-      <span class="hidden sm:inline-flex items-center gap-1 text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
-        USD ₱57.50
-      </span>
+        <span id="topbar-date" class="font-semibold text-slate-800">{serverDateStr}</span>
+        <span class="text-slate-300">•</span>
+        <span id="topbar-clock" class="font-mono font-bold text-slate-950">{serverTimeStr}</span>
+        <span class="text-[11px] text-slate-500 font-mono font-semibold">PHT</span>
+      </div>
     </div>
 
-    <!-- Right Hotline Group -->
-    <div class="flex items-center gap-3 ml-auto">
-      <div class="flex items-center gap-1.5 text-red-600 font-semibold">
-        <svg class="w-3.5 h-3.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
-        <a href="tel:911" class="hover:underline focus:outline-none focus:ring-1 focus:ring-red-500 rounded px-1" aria-label="Call Emergency 911">
-          911
-        </a>
+    <!-- Center Section: Real-time Weather & Single Rotating PHP Exchange Rate (Changes every 5s) -->
+    <div class="hidden md:flex items-center gap-4 text-xs sm:text-[13px]">
+      
+      <!-- Live Zamboanga Weather (Clean Typography) -->
+      <div 
+        id="topbar-weather-container" 
+        class="flex items-center gap-1.5 text-slate-800 hover:text-slate-950 transition-colors cursor-default"
+        title="Live Weather for Zamboanga City (Lat 6.92°, Lon 122.08°)"
+      >
+        <span id="topbar-weather-icon" class="inline-flex items-center text-amber-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </span>
+        <span id="topbar-weather-temp" class="font-bold text-slate-900">{initialTemp}</span>
+        <span id="topbar-weather-desc" class="text-slate-600 text-xs">{initialDesc}</span>
+        <span id="topbar-weather-details" class="hidden lg:inline-block text-[11px] text-slate-500 pl-1.5 border-l border-slate-300 ml-0.5">
+          {initialDetails}
+        </span>
       </div>
 
-      <span class="text-slate-300">|</span>
+      <span class="h-4 w-px bg-slate-300"></span>
 
-      <a href="tel:0629912345" class="text-slate-600 hover:text-blue-600 font-medium transition-colors hidden sm:inline" aria-label="Call CDRRMO Zamboanga City">
-        CDRRMO Zamboanga
-      </a>
+      <!-- Live Rotating Exchange Rate (Displays 1 rate at a time, rotates every 5s) -->
+      <!-- Live Rotating Exchange Rate (Read-only, no dropdown) -->
+      <div class="flex items-center gap-2 text-slate-800 cursor-default">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <div id="topbar-forex-rotator" class="flex items-center gap-1.5 font-mono text-xs sm:text-[13px] transition-opacity duration-300">
+          <span id="rate-display" class="font-bold text-slate-900">{initialRates.USD ? `1 USD = ₱ ${initialRates.USD}` : '1 USD = ₱ --'}</span>
+        </div>
+      </div>
+
     </div>
+
   </div>
 </aside>
+
+<script>
+  let forexRotatorInterval: number | undefined;
+
+  function initTopBarLogic() {
+    // Clear any previous interval on re-init
+    if (forexRotatorInterval) {
+      clearInterval(forexRotatorInterval);
+      forexRotatorInterval = undefined;
+    }
+
+    // 1. Live Philippine Standard Time (PHT) Clock
+    const dateEl = document.getElementById('topbar-date');
+    const clockEl = document.getElementById('topbar-clock');
+
+    function updateClock() {
+      const now = new Date();
+      if (dateEl) {
+        dateEl.textContent = new Intl.DateTimeFormat('en-PH', {
+          timeZone: 'Asia/Manila',
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        }).format(now);
+      }
+      if (clockEl) {
+        clockEl.textContent = new Intl.DateTimeFormat('en-PH', {
+          timeZone: 'Asia/Manila',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true,
+        }).format(now);
+      }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // 2. Real-time Weather Fetch for Zamboanga City (Lat: 6.9214, Lon: 122.0790)
+    const tempEl = document.getElementById('topbar-weather-temp');
+    const descEl = document.getElementById('topbar-weather-desc');
+    const iconEl = document.getElementById('topbar-weather-icon');
+    const detailsEl = document.getElementById('topbar-weather-details');
+
+    const svgSun = `<svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+    const svgCloud = `<svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" /></svg>`;
+    const svgRain = `<svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 16.2A4.5 4.5 0 0017.5 8h-1.8A7 7 0 104 14.9M16 14v6m-4-4v6m-4-4v6" /></svg>`;
+    const svgThunder = `<svg class="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`;
+
+    const weatherCodeMap: Record<number, { desc: string; iconSvg: string }> = {
+      0: { desc: 'Clear', iconSvg: svgSun },
+      1: { desc: 'Mainly Clear', iconSvg: svgSun },
+      2: { desc: 'Partly Cloudy', iconSvg: svgCloud },
+      3: { desc: 'Overcast', iconSvg: svgCloud },
+      45: { desc: 'Foggy', iconSvg: svgCloud },
+      48: { desc: 'Depositing Rime Fog', iconSvg: svgCloud },
+      51: { desc: 'Light Drizzle', iconSvg: svgRain },
+      53: { desc: 'Moderate Drizzle', iconSvg: svgRain },
+      55: { desc: 'Dense Drizzle', iconSvg: svgRain },
+      61: { desc: 'Slight Rain', iconSvg: svgRain },
+      63: { desc: 'Moderate Rain', iconSvg: svgRain },
+      65: { desc: 'Heavy Rain', iconSvg: svgRain },
+      80: { desc: 'Rain Showers', iconSvg: svgRain },
+      81: { desc: 'Moderate Showers', iconSvg: svgRain },
+      82: { desc: 'Violent Showers', iconSvg: svgRain },
+      95: { desc: 'Thunderstorm', iconSvg: svgThunder },
+      96: { desc: 'Thunderstorm & Hail', iconSvg: svgThunder },
+      99: { desc: 'Heavy Thunderstorm', iconSvg: svgThunder },
+    };
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.9214&longitude=122.0790&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.current) {
+          const temp = Math.round(data.current.temperature_2m);
+          const code = data.current.weather_code ?? 0;
+          const humidity = data.current.relative_humidity_2m;
+          const wind = Math.round(data.current.wind_speed_10m);
+
+          const weatherInfo = weatherCodeMap[code] || { desc: 'Fair', iconSvg: svgSun };
+
+          if (tempEl) tempEl.textContent = `${temp}°C`;
+          if (descEl) descEl.textContent = weatherInfo.desc;
+          if (iconEl) iconEl.innerHTML = weatherInfo.iconSvg;
+          if (detailsEl) detailsEl.textContent = `${humidity}% Hum • ${wind} km/h`;
+        }
+      } catch (err) {
+        console.warn('TopBar: Live weather fetch notice', err);
+      }
+    }
+
+    fetchWeather();
+
+    let allCalculatedRates: Record<string, string> = {};
+    let rotateCurrencies: string[] = [];
+    let rotateIdx = 0;
+
+    function startRotator() {
+      const displayEl = document.getElementById('rate-display');
+      const rotatorContainer = document.getElementById('topbar-forex-rotator');
+
+      if (!displayEl || !rotatorContainer) return;
+
+      forexRotatorInterval = window.setInterval(() => {
+        if (rotateCurrencies.length === 0) return;
+        rotateIdx = (rotateIdx + 1) % rotateCurrencies.length;
+        const code = rotateCurrencies[rotateIdx];
+        const val = allCalculatedRates[code] || '--';
+
+        rotatorContainer.classList.add('opacity-0');
+        setTimeout(() => {
+          displayEl.textContent = `1 ${code} = ₱ ${val}`;
+          rotatorContainer.classList.remove('opacity-0');
+        }, 200);
+      }, 5000);
+    }
+
+    async function fetchForex() {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/PHP');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.rates) {
+          const rates = data.rates;
+          const newCalculated: Record<string, string> = {};
+
+          Object.keys(rates).forEach(code => {
+            if (rates[code] && rates[code] > 0) {
+              const phpVal = 1 / rates[code];
+              newCalculated[code] = phpVal < 0.1 ? phpVal.toFixed(4) : phpVal.toFixed(2);
+            }
+          });
+
+          allCalculatedRates = newCalculated;
+          rotateCurrencies = Object.keys(newCalculated);
+
+          const displayEl = document.getElementById('rate-display');
+          if (displayEl && rotateIdx === 0 && allCalculatedRates.USD) {
+            displayEl.textContent = `1 USD = ₱ ${allCalculatedRates.USD}`;
+          }
+        }
+      } catch (err) {
+        console.warn('TopBar: Live forex fetch notice', err);
+      }
+    }
+
+    fetchForex();
+    startRotator();
+
+
+  }
+
+  document.addEventListener('astro:page-load', initTopBarLogic);
+  if (document.readyState !== 'loading') {
+    initTopBarLogic();
+  }
+</script>
