@@ -3,6 +3,7 @@ import type { Ordinance } from '../../types/ordinance';
 
 interface Props {
   ordinances: Ordinance[];
+  isLoading?: boolean;
   sortBy: 'number-desc' | 'number-asc' | 'year-desc' | 'year-asc';
   setSortBy: (sortBy: 'number-desc' | 'number-asc' | 'year-desc' | 'year-asc') => void;
   cleanOrdinanceNum: (numStr: string) => string;
@@ -17,6 +18,7 @@ interface Props {
 
 export const OrdinanceTable: React.FC<Props> = ({
   ordinances,
+  isLoading = false,
   sortBy,
   setSortBy,
   cleanOrdinanceNum,
@@ -28,6 +30,22 @@ export const OrdinanceTable: React.FC<Props> = ({
   setSelectedCategory,
   setSelectedYear,
 }) => {
+  if (isLoading) {
+    return (
+      <div className="p-8 space-y-4 flex-1">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="animate-pulse flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+            <div className="space-y-2 flex-1">
+              <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+              <div className="h-3 bg-slate-200 rounded w-3/4"></div>
+            </div>
+            <div className="h-8 bg-slate-200 rounded w-24"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (ordinances.length === 0) {
     return (
       <div className="p-12 text-center text-slate-500 flex-1 flex flex-col items-center justify-center space-y-2">

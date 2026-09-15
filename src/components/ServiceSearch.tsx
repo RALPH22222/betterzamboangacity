@@ -74,7 +74,7 @@ export const ServiceSearch: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl shadow-blue-900/10 border border-slate-100 max-w-lg w-full font-sans">
+    <div suppressHydrationWarning className="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl shadow-blue-900/10 border border-slate-100 max-w-lg w-full font-sans">
       {/* Search Box Title Header */}
       <div className="flex items-center gap-2.5 mb-5 text-slate-800 font-bold text-lg sm:text-xl">
         <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
