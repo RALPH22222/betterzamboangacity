@@ -74,12 +74,12 @@ const currentTheme = themeClasses[selectedColor] || themeClasses.blue;
   href={href}
   target={externalLink ? "_blank" : undefined}
   rel={externalLink ? "noopener noreferrer" : undefined}
-  class={`bg-white p-5 sm:p-6 rounded-xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group h-full relative text-left ${currentTheme.hover}`}
+  class={`bg-white p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group h-full relative text-left rounded-[4px] ${currentTheme.hover}`}
 >
   <div>
     <!-- Top Row: Icon Badge & Badge / External Link -->
     <div class="flex items-center justify-between gap-2 mb-4">
-      <div class={`w-10 h-10 rounded-lg flex items-center justify-center border transition-colors shrink-0 ${currentTheme.bg}`}>
+      <div class={`w-10 h-10 flex items-center justify-center border transition-colors shrink-0 rounded-[4px] ${currentTheme.bg}`}>
         {icon === 'population' && (
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -125,7 +125,7 @@ const currentTheme = themeClasses[selectedColor] || themeClasses.blue;
 
       <div class="flex items-center gap-1.5">
         {badge && (
-          <span class={`px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider border ${currentTheme.badge}`}>
+          <span class={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider border rounded-[2px] ${currentTheme.badge}`}>
             {badge}
           </span>
         )}

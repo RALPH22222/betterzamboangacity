@@ -78,7 +78,7 @@ try {
 }
 ---
 
-<div class="bg-white rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-100/60 overflow-hidden flex flex-col justify-between h-full group hover:shadow-xl transition-all duration-300 font-sans relative">
+<div class="bg-white border border-slate-200/90 shadow-lg shadow-slate-100/60 overflow-hidden flex flex-col justify-between h-full group hover:shadow-xl transition-all duration-300 font-sans relative rounded-[4px]">
   
   <!-- Vinta Flag Top Ribbon Stripe -->
   <div class="flex h-1.5 w-full">
@@ -98,7 +98,7 @@ try {
       <!-- Left side: Icon & Temp -->
       <div class="flex items-center gap-4">
         <!-- Main Weather Icon Circle -->
-        <div id="weather-main-icon" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100/70 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0 shadow-sm">
+        <div id="weather-main-icon" class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-50 to-indigo-100/70 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0 shadow-sm rounded-[4px]">
           <!-- Sun / Cloud Icon -->
           <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
@@ -139,8 +139,8 @@ try {
     <div class="grid grid-cols-2 gap-4 mb-6">
       
       <!-- Humidity Metric Card -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50/80 border border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0">
+      <div class="flex items-center gap-3 p-3.5 bg-slate-50/80 border border-slate-100 rounded-[4px]">
+        <div class="w-9 h-9 bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0 rounded-[4px]">
           <!-- Water Drop Icon -->
           <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -153,8 +153,8 @@ try {
       </div>
 
       <!-- Wind Speed Metric Card -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50/80 border border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-teal-100/70 text-teal-600 flex items-center justify-center shrink-0">
+      <div class="flex items-center gap-3 p-3.5 bg-slate-50/80 border border-slate-100 rounded-[4px]">
+        <div class="w-9 h-9 bg-teal-100/70 text-teal-600 flex items-center justify-center shrink-0 rounded-[4px]">
           <!-- Wind Icon -->
           <svg class="w-5 h-5 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -177,7 +177,7 @@ try {
 
       <div id="widget-hourly-container" class="grid grid-cols-4 sm:grid-cols-6 gap-2">
         {serverHourly.map((item) => (
-          <div class="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-50 border border-slate-150/80 hover:border-blue-300 hover:bg-blue-50/40 transition-colors text-center">
+          <div class="flex flex-col items-center justify-center p-2.5 bg-slate-50 border border-slate-150/80 hover:border-blue-300 hover:bg-blue-50/40 transition-colors text-center rounded-[4px]">
             <span class="text-[11px] font-semibold text-slate-500 mb-1">{item.time}</span>
             <div class="my-1 text-blue-500">
               {item.code === 0 || item.code === 1 ? (
@@ -286,7 +286,7 @@ try {
               }
 
               items.push(`
-                <div class="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-slate-50 border border-slate-150/80 hover:border-blue-300 hover:bg-blue-50/40 transition-colors text-center">
+                <div class="flex flex-col items-center justify-center p-2.5 bg-slate-50 border border-slate-150/80 hover:border-blue-300 hover:bg-blue-50/40 transition-colors text-center rounded-[4px]">
                   <span class="text-[11px] font-semibold text-slate-500 mb-1">${displayHour}</span>
                   <div class="my-1">${iconSvg}</div>
                   <span class="text-sm font-bold text-slate-800">${temp}</span>

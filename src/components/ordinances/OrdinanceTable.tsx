@@ -34,12 +34,12 @@ export const OrdinanceTable: React.FC<Props> = ({
     return (
       <div className="p-8 space-y-4 flex-1">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="animate-pulse flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+          <div key={i} className="animate-pulse flex items-center justify-between p-4 bg-slate-50 rounded-[4px]">
             <div className="space-y-2 flex-1">
-              <div className="h-4 bg-slate-200 rounded w-1/4"></div>
-              <div className="h-3 bg-slate-200 rounded w-3/4"></div>
+              <div className="h-4 bg-slate-200 rounded-[2px] w-1/4"></div>
+              <div className="h-3 bg-slate-200 rounded-[2px] w-3/4"></div>
             </div>
-            <div className="h-8 bg-slate-200 rounded w-24"></div>
+            <div className="h-8 bg-slate-200 rounded-[4px] w-24"></div>
           </div>
         ))}
       </div>
@@ -57,7 +57,7 @@ export const OrdinanceTable: React.FC<Props> = ({
             setSelectedCategory('all');
             setSelectedYear('all');
           }}
-          className="px-4 py-1.5 bg-[#0032A0] text-white rounded font-bold text-xs"
+          className="px-4 py-1.5 bg-[#0032A0] text-white rounded-[4px] font-bold text-xs"
         >
           Reset Filters
         </button>
@@ -158,7 +158,7 @@ export const OrdinanceTable: React.FC<Props> = ({
                     href={extUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0032A0] hover:bg-[#002680] text-white font-bold text-xs transition-all shadow-xs"
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#0032A0] hover:bg-[#002680] text-white font-bold text-xs transition-all shadow-xs"
                   >
                     <span>Read Full</span>
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

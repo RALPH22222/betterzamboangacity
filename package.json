@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "filter-officials": "node scripts/filter-city-officials.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.8",
