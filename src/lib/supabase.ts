@@ -3,6 +3,27 @@ import type { Ordinance } from '../types/ordinance';
 import { allBarangays } from '../data/barangay-data';
 import { floodControlProjects } from '../data/flood-control-data';
 import { emergencyFacilities } from '../data/disaster-data';
+import cityOfficialsFallback from '../content/city-officials/zamboanga_city_officials.json';
+
+export interface CityOfficial {
+  id?: string;
+  lastName: string;
+  firstName: string;
+  middleName?: string;
+  middleNameSource?: string;
+  title?: string;
+  fullName: string;
+  position: string;
+  party?: string;
+  year: number;
+  province: string;
+  city: string;
+  region?: string;
+  sex?: string;
+  sexSource?: string;
+  district?: string;
+  photoUrl?: string;
+}
 
 export interface BarangayOfficial {
   id: string;
@@ -314,3 +335,61 @@ export async function fetchEthnicTribes() {
 
   return { data: [], isMock: true };
 }
+
+// ----------------------------------------------------------------------------
+// 7. CITY OFFICIALS FETCH (NLE WINNERS 2001-2025)
+// ----------------------------------------------------------------------------
+export async function fetchCityOfficials(filters?: { year?: number; position?: string }) {
+  if (supabase) {
+    try {
+      let query = supabase.from('city_officials').select('*').order('year', { ascending: false });
+      
+      if (filters?.year) {
+        query = query.eq('year', filters.year);
+      }
+      if (filters?.position) {
+        query = query.ilike('position', `%${filters.position}%`);
+      }
+
+      const { data, error } = await query;
+
+      if (!error && data && data.length > 0) {
+        const mapped: CityOfficial[] = data.map((o: any) => ({
+          id: o.id,
+          lastName: o.last_name,
+          firstName: o.first_name,
+          middleName: o.middle_name,
+          middleNameSource: o.middle_name_source,
+          title: o.title,
+          fullName: o.full_name,
+          position: o.position,
+          party: o.party,
+          year: o.year,
+          province: o.province,
+          city: o.city,
+          region: o.region,
+          sex: o.sex,
+          sexSource: o.sex_source,
+          district: o.district,
+          photoUrl: o.photo_url || o.picture_url,
+        }));
+        return { data: mapped, isMock: false };
+      }
+    } catch (err) {
+      console.error("Supabase city officials fetch error:", err);
+    }
+  }
+
+  // Fallback to local extracted JSON dataset
+  let result = cityOfficialsFallback as CityOfficial[];
+  if (filters?.year) {
+    result = result.filter((o) => Number(o.year) === Number(filters.year));
+  }
+  if (filters?.position) {
+    const posUpper = filters.position.toUpperCase();
+    result = result.filter((o) => o.position.toUpperCase().includes(posUpper));
+  }
+
+  return { data: result, isMock: true };
+}
+
